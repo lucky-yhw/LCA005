@@ -1,0 +1,40 @@
+[
+    {
+        "systemPath": "/api/login/v2/quickLogin",
+        "customPath": "/gameExcitings/postLogin/fast",
+        "reqReplace": {
+            "gameId": "appId",
+            "sysId": "deviceId"
+        }
+    },
+    {
+        "systemPath": "/api/device/save",
+        "customPath": "/gameExcitings/sysInfo/log",
+        "reqReplace": {
+            "sysVersion": "osVersion",
+            "sysName": "osType",
+            "gameVersion": "appVersion",
+            "gameChannel": "channel",
+            "sysId": "deviceNo"
+        }
+    },
+    {
+        "systemPath": "/api/index/getAbcInfo",
+        "customPath": "/gameExcitings/sdk/sdkInfo",
+        "reqReplace": {
+            "gameVersion": "version",
+            "sysName": "osType",
+            "gameChannel": "channel"
+        }
+    },
+    {
+        "systemPath": "/api/index/getConfigByKey",
+        "customPath": "/gameExcitings/config/configInfo",
+        "reqReplace": {
+            "getKey": "searchValue"
+        },
+        "resReplace": {
+            "exciting_match_22031168": "system_web_url"
+        }
+    }
+]
