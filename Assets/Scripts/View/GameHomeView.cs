@@ -1,17 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class GameHomeView : MonoBehaviour
+public class GameHomeView : MainViewChild
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private ScrollRect _scrollRect;
+
+    public override void OnShow()
     {
+        for (int i = _scrollRect.content.childCount - 1; i >= 0; i--)
+        {
+            Destroy(_scrollRect.content.GetChild(i));
+        }
+
+        var personConfigTable = ConfigLoader.Load<PersonConfigTable>();
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnHide()
     {
         
     }

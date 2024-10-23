@@ -9,10 +9,10 @@ public class LaunchView : MonoBehaviour
 {
     [SerializeField] private Image _progressBar;
 
-    private void Awake()
+    private void Start()
     {
         _progressBar.fillAmount = 0;
-        //进度条走完打开主界面，关闭这个界面
+        MainView.Open();
         _progressBar.DOFillAmount(1, 5).OnComplete(() =>
         {
             gameObject.SetActive(false);
