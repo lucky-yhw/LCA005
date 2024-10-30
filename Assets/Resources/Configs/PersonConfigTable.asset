@@ -14,18 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   list:
   - id: 1
-    head: 0
-    name: 
-    description: 
+    head: 2
+    name: Wentong
+    description: Shabi
+    challengeTime: 100
+    score: 5000
   - id: 2
-    head: 0
-    name: 
-    description: 
+    head: 3
+    name: Wentong
+    description: Shabi
+    challengeTime: 100
+    score: 5000
   - id: 3
-    head: 0
-    name: 
-    description: 
+    head: 4
+    name: Wentong
+    description: Shabi
+    challengeTime: 100
+    score: 5000
   - id: 4
-    head: 0
-    name: 
-    description: 
+    head: 5
+    name: Wentong
+    description: Shabi
+    challengeTime: 100
+    score: 5000

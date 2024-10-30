@@ -11,6 +11,8 @@ public class PersonConfig : ConfigBase
     public int head = 1;
     public string name = "";
     public string description = "";
+    public int challengeTime = 100;
+    public int score = 5000;
 }
 
 
