@@ -19,9 +19,9 @@ public class GameHomeView : MainViewChild
         RefreshUserData();
         RefreshChallengePeople();
     }
-    
+
     public override void OnHide()
-    {        
+    {
         UserData.Instance.OnDataChanged -= OnDataChanged;
     }
 
@@ -39,16 +39,8 @@ public class GameHomeView : MainViewChild
 
     private void RefreshChallengePeople()
     {
-        for (int i = _scrollRect.content.childCount - 1; i >= 0; i--)
-        {
-            Destroy(_scrollRect.content.GetChild(i).gameObject);
-        }
-
         var ranPerson = Utils.RandomPerson(10);
-        for (int i = 0; i < ranPerson.Count; i++)
-        {
-            var go = GameObject.Instantiate(_itemPrefab, _scrollRect.content, false);
-            go.GetComponent<ChallengeItem>().UpdateData(ranPerson[i]);
-        }
+        Utils.RefreshListItems(_scrollRect, _itemPrefab, ranPerson.Count,
+            ((i, o) => { o.GetComponent<ChallengeItem>().UpdateData(ranPerson[i]); }));
     }
 }

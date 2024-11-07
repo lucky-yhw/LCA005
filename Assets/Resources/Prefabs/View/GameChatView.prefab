@@ -980,10 +980,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 94
+    m_Top: 50
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 8
+  m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -1057,10 +1057,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 94
+    m_Top: 50
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 8
+  m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -1267,8 +1267,8 @@ MonoBehaviour:
   _tabMessages: {fileID: 4537255454411534059}
   _scrollRectExplore: {fileID: 4337772111254166353}
   _scrollRectMessages: {fileID: 774794941020348592}
-  _explorePrefab: {fileID: 4712988459985419785}
-  _messagePrefab: {fileID: 4537255454411534059}
+  _explorePrefab: {fileID: 5883817773961242896, guid: affd7f3fd59868449a7f5a3021c07acc, type: 3}
+  _messagePrefab: {fileID: 425174242339123866, guid: 683e24b279f2e4a4cb1c8edcce6ab59b, type: 3}
 --- !u!1 &9072147327834995781
 GameObject:
   m_ObjectHideFlags: 0

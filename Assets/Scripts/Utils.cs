@@ -1,9 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public static class Utils
 {
+    public static T ForceRebuildImmediate<T>(this T comp, bool withChildren = false) where T : Component
+    {
+        if (withChildren)
+        {
+            var rtChildren = comp.GetComponentsInChildren<RectTransform>();
+            var children = new List<RectTransform>(rtChildren);
+            for(int i = children.Count - 1; i >= 0; i--)
+            {
+                var child = children[i];
+                UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(child);
+            }
+        }
+        else
+        {
+            UnityEngine.UI.LayoutRebuilder.ForceRebuildLayoutImmediate(comp.GetComponent<RectTransform>());
+        }
+        return comp;
+    }
+    
     public const float GOLD_RATE = 10000f;
     
     public static Sprite GetUserHead(int id)
@@ -40,5 +62,29 @@ public static class Utils
             }
         }
         return ranPerson;
+    }
+
+    public static void RefreshListItems(ScrollRect scrollRect, GameObject itemPrefab,int count, Action<int,GameObject> onRefresh)
+    {
+        for (int i = scrollRect.content.childCount - 1; i >= 0; i--)
+        {
+            GameObject.Destroy(scrollRect.content.GetChild(i).gameObject);
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            var go = GameObject.Instantiate(itemPrefab,scrollRect.content);
+            onRefresh?.Invoke(i,go);
+        }
+    }
+
+    public static DateTime Timestamp2DateTime(int timestamp)
+    {
+        return DateTime.Now;
+    }
+
+    public static int DateTime2Timestamp(DateTime dateTime)
+    {
+        return 0;
     }
 }

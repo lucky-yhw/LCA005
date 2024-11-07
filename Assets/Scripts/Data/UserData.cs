@@ -1,15 +1,43 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public delegate void UserDataChangeDalegate();
 
 [Serializable]
+public class SerializableTexture
+{
+    public byte[] textureData;
+    public int width;
+    public int height;
+    public TextureFormat textureFormat;
+ 
+    public SerializableTexture(Texture2D texture)
+    {
+        textureData = texture.EncodeToPNG(); // 使用PNG编码作为示例
+        width = texture.width;
+        height = texture.height;
+        textureFormat = texture.format;
+    }
+ 
+    public Texture2D ToTexture2D()
+    {
+        Texture2D texture = new Texture2D(width, height, textureFormat, false);
+        texture.LoadImage(textureData);
+        return texture;
+    }
+}
+
+
+[Serializable]
 public class ChatLine
 {
-    public string content;
-    public int timeStamp;
+    public string content = "";
+    public SerializableTexture texture;
+    public int timeStamp = 0;
+    public bool isMyContent = true;
 }
 
 [Serializable]
@@ -36,16 +64,16 @@ public class UserData
                 }
                 else
                 {
-                    _instance = new UserData();
+                    _instance = new UserData {_userName = "Guest_" + Random.Range(100000, 999999)};
                 }
             }
             return _instance;
         }
     }
     
-    [SerializeField] private string _userName = "UserName";
+    [SerializeField] private string _userName = "";
     [SerializeField] private int _userAge = 18;
-    [SerializeField] private string _userDescription = "I wan't to fly";
+    [SerializeField] private string _userDescription = "empty description";
     [SerializeField] private int _userHead = 1;
     [SerializeField] private long _gold;
     [SerializeField] private List<ChatData> _chatDataList = new List<ChatData>();
@@ -107,11 +135,58 @@ public class UserData
         }
     }
     
-    public List<ChatData> ChatDataList => _chatDataList;
+    public IReadOnlyList<ChatData> ChatDataList => _chatDataList;
 
     public void Save()
     {
         PlayerPrefs.SetString("UserData",JsonUtility.ToJson(this));
+        PlayerPrefs.Save();
+    }
+
+    public ChatData GetChatData(int personId)
+    {
+        foreach (var chatData in _chatDataList)
+        {
+            if (chatData.personId == personId)
+            {
+                return chatData;
+            }
+        }
+
+        var data = new ChatData {personId = personId, chatLines = new List<ChatLine>()};
+        return data;
+    }
+
+    public void SaveChat(int personId,bool isMyChat,string content,SerializableTexture texture)
+    {
+        var chatLine = new ChatLine
+        {
+            timeStamp = Utils.DateTime2Timestamp(DateTime.Now), content = content, isMyContent = isMyChat,
+            texture = texture
+        };
+        ChatData data = null;
+        foreach (var chatData in _chatDataList)
+        {
+            if (chatData.personId == personId)
+            {
+                data = chatData;
+            }
+        }
+
+        if (data == null)
+        {
+            data = new ChatData {personId = personId, chatLines = new List<ChatLine>()};   
+            _chatDataList.Add(data);
+        }
+        data.chatLines.Add(chatLine);
+        OnDataChanged?.Invoke();
+        Save();
+    }
+
+    public void Delete()
+    {
+        _instance = null;
+        PlayerPrefs.SetString("UserData","");
         PlayerPrefs.Save();
     }
 }
