@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using LitJson;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -66,10 +67,7 @@ public static class Utils
 
     public static void RefreshListItems(ScrollRect scrollRect, GameObject itemPrefab,int count, Action<int,GameObject> onRefresh)
     {
-        for (int i = scrollRect.content.childCount - 1; i >= 0; i--)
-        {
-            GameObject.Destroy(scrollRect.content.GetChild(i).gameObject);
-        }
+        DestroyAll(scrollRect.content);
 
         for (int i = 0; i < count; i++)
         {
@@ -78,13 +76,57 @@ public static class Utils
         }
     }
 
-    public static DateTime Timestamp2DateTime(int timestamp)
+    public static void DestroyAll(Transform trans)
+    {
+        for (int i = trans.childCount - 1; i >= 0; i--)
+        {
+            GameObject.Destroy(trans.GetChild(i).gameObject);
+        }
+    }
+
+        public static DateTime Timestamp2DateTime(int timestamp)
     {
         return DateTime.Now;
     }
 
     public static int DateTime2Timestamp(DateTime dateTime)
     {
+        return 0;
+    }
+
+    public static float GetJsonSingle(JsonData jsonData)
+    {
+        if (jsonData.IsInt)
+        {
+            return Convert.ToSingle((int) jsonData);
+        }
+        if (jsonData.IsDouble)
+        {
+            return Convert.ToSingle((double) jsonData);
+        }
+        if (jsonData.IsLong)
+        {
+            return Convert.ToSingle((long) jsonData);
+        }
+
+        return 0;
+    }
+    
+    public static int GetJsonInt(JsonData jsonData)
+    {
+        if (jsonData.IsInt)
+        {
+            return Convert.ToInt32((int) jsonData);
+        }
+        if (jsonData.IsDouble)
+        {
+            return Convert.ToInt32((double) jsonData);
+        }
+        if (jsonData.IsLong)
+        {
+            return Convert.ToInt32((long) jsonData);
+        }
+
         return 0;
     }
 }

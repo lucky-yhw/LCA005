@@ -23,6 +23,7 @@ public class ChallengeItem : MonoBehaviour
         _challengeButton.onClick.AddListener(() =>
         {
             //挑战
+            GameView.Open(config.id);
         });
         _reportButton.onClick.AddListener(() =>
         {
