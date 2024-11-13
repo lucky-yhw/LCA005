@@ -75,8 +75,11 @@ public class UserData
     [SerializeField] private int _userAge = 18;
     [SerializeField] private string _userDescription = "empty description";
     [SerializeField] private int _userHead = 1;
+    [SerializeField] private SerializableTexture _customerHead;
+    [SerializeField] private SerializableTexture _background;
     [SerializeField] private long _gold;
     [SerializeField] private List<ChatData> _chatDataList = new List<ChatData>();
+    [SerializeField] private List<int> _blockList = new List<int>();
 
     public UserDataChangeDalegate OnDataChanged;
     
@@ -135,8 +138,32 @@ public class UserData
         }
     }
     
+    public SerializableTexture CustomerHead
+    {
+        get => _customerHead;
+        set
+        {
+            _customerHead = value;
+            OnDataChanged?.Invoke();
+            Save();
+        }
+    }
+    
+    public SerializableTexture Background
+    {
+        get => _background;
+        set
+        {
+            _background = value;
+            OnDataChanged?.Invoke();
+            Save();
+        }
+    }
+    
     public IReadOnlyList<ChatData> ChatDataList => _chatDataList;
 
+    public IReadOnlyList<int> BlockList => _blockList;
+    
     public void Save()
     {
         PlayerPrefs.SetString("UserData",JsonUtility.ToJson(this));
@@ -188,5 +215,25 @@ public class UserData
         _instance = null;
         PlayerPrefs.SetString("UserData","");
         PlayerPrefs.Save();
+    }
+
+    public void Block(int personId)
+    {
+        if (!_blockList.Contains(personId))
+        {
+            _blockList.Add(personId);
+            OnDataChanged?.Invoke();
+            Save();
+        }
+    }
+
+    public void RemoveBlock(int personId)
+    {
+        if (_blockList.Contains(personId))
+        {
+            _blockList.Remove(personId);
+            OnDataChanged?.Invoke();
+            Save();
+        }
     }
 }

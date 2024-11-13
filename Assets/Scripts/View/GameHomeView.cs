@@ -33,7 +33,7 @@ public class GameHomeView : MainViewChild
     private void RefreshUserData()
     {
         _nameText.text = UserData.Instance.UserName;
-        _headImg.sprite = Utils.GetUserHead(UserData.Instance.UserHead);
+        _headImg.sprite = Utils.GetMyHead();//Utils.GetUserHead(UserData.Instance.UserHead);
         _goldText.text = Utils.FormatGold(UserData.Instance.Gold);
     }
 

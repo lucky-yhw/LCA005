@@ -16,6 +16,9 @@ public class GameView : MonoBehaviour
     public static readonly int ICON_CLEAR_COUNT = 3;
     public static readonly float ICON_COLLECT_DURATION = 0.3f;
     public static readonly int COLLECTION_LAYER = 5000;
+    public static readonly int REMOVE_ITEM_COUNT = 3;
+    public static readonly int REMOVE_ITEM_Y = 9;
+    public static readonly int REMOVE_ITEM_X = 0;
 
     [SerializeField] private List<Transform> _clearBox;
     [SerializeField] private Button _buttonRestart;
@@ -32,8 +35,6 @@ public class GameView : MonoBehaviour
 
     private int _currentScore = 0;
 
-    private bool _hasRemove = false;
-
     private List<GameIcon> _gameIcons = new List<GameIcon>();
     private List<GameIcon> _collectIcons = new List<GameIcon>();
     private EventSystem _currentEventSystem;
@@ -42,7 +43,7 @@ public class GameView : MonoBehaviour
     {
         _buttonRestart.onClick.AddListener(() => { StartGame(); });
         _buttonRefresh.onClick.AddListener(() => { Flush(); });
-        _buttonRemove.onClick.AddListener(() => { });
+        _buttonRemove.onClick.AddListener(() => { RemoveClearBox(); });
         _currentEventSystem = EventSystem.current;
     }
 
@@ -50,7 +51,7 @@ public class GameView : MonoBehaviour
     {
         _textMyName.text = UserData.Instance.UserName;
         _textMyScore.text = _currentScore.ToString();
-        _imgMyHead.sprite = Utils.GetUserHead(UserData.Instance.UserHead);
+        _imgMyHead.sprite = Utils.GetMyHead();//Utils.GetUserHead(UserData.Instance.UserHead);
         var config = ConfigLoader.Load<PersonConfigTable>().table[personId];
         _imgOppHead.sprite = Utils.GetUserHead(config.head);
         _textOppScore.text = config.score.ToString();
@@ -77,6 +78,7 @@ public class GameView : MonoBehaviour
     private void StartGame()
     {
         ChangeMyScore(0);
+        _buttonRemove.interactable = true;
         Utils.DestroyAll(_gameContainer);
         foreach (var t in _clearBox)
         {
@@ -153,6 +155,12 @@ public class GameView : MonoBehaviour
             ChangeMyScore(_currentScore + ICON_CLEAR_COUNT);
         }
 
+        if (_gameIcons.Count == 0)
+        {
+            Debug.Log("Game Win");
+            yield break;
+        }
+        
         if (_collectIcons.Count == _clearBox.Count)
         {
             Debug.Log("GameEnd");
@@ -223,6 +231,30 @@ public class GameView : MonoBehaviour
         {
             icons[i].position = positions[i];
             icons[i].layer = layers[i];
+        }
+        ResortAll();
+    }
+
+    public void RemoveClearBox()
+    {
+        if (_collectIcons.Count < REMOVE_ITEM_COUNT)
+        {
+            return;
+        }
+
+        _buttonRemove.interactable = false;
+        for (int i = 0; i < REMOVE_ITEM_COUNT; i++)
+        {
+            if (_collectIcons.Count > 0)
+            {
+                var icon = _collectIcons.Last();
+                icon.transform.SetParent(_gameContainer);
+                _collectIcons.Remove(icon);
+                _gameIcons.Add(icon);
+                icon.status = IconStatus.Game;
+                icon.position = new Vector2(REMOVE_ITEM_X + i, REMOVE_ITEM_Y);
+                icon.layer = 200;
+            }
         }
         ResortAll();
     }

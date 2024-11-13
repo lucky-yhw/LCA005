@@ -1,13 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using LitJson;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public static class Utils
 {
+    public const float GOLD_RATE = 10000f;
+    public const int HEAD_MAX = 10;
+    public const int NAME_MAX = 20;
+    public const int DESCRIPTION_MAX = 200;
     public static T ForceRebuildImmediate<T>(this T comp, bool withChildren = false) where T : Component
     {
         if (withChildren)
@@ -26,12 +33,25 @@ public static class Utils
         }
         return comp;
     }
-    
-    public const float GOLD_RATE = 10000f;
-    
+
     public static Sprite GetUserHead(int id)
     {
         return Resources.Load<Sprite>("Textures/Head/head_" + id);
+    }
+
+    public static Sprite GetMyHead()
+    {
+        if (UserData.Instance.CustomerHead != null && UserData.Instance.CustomerHead.textureData != null && UserData.Instance.CustomerHead.textureData.Length > 0)
+        {
+            return  Sprite.Create(UserData.Instance.CustomerHead.ToTexture2D(),
+                new Rect(Vector2.zero,
+                    new Vector2(UserData.Instance.CustomerHead.width, UserData.Instance.CustomerHead.height)),
+                new Vector2(0.5f, 0.5f));
+        }
+        else
+        {
+            return GetUserHead(UserData.Instance.UserHead);
+        }
     }
 
     public static string FormatGold(long gold)
@@ -128,5 +148,65 @@ public static class Utils
         }
 
         return 0;
+    }
+    
+    public static void PickImage(Action<Texture2D> onPick)
+    {
+        NativeGallery.Permission permission = NativeGallery.GetImageFromGallery((path) =>
+        {
+            if (!string.IsNullOrEmpty(path))
+            {
+                Main.Instance.StartCoroutine(LoadImage(path, onPick));
+            }
+            else
+            {
+                onPick?.Invoke(null);
+            }
+        }, "Select a PNG image", "image/png");
+        Debug.Log("Permission result: " + permission);
+    }
+    
+    private static IEnumerator LoadImage(string path,Action<Texture2D> onPick)
+    {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture("file://" + path);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            // 从不可读的Texture2D复制像素到可读的Texture2D
+            Texture2D sourceTexture = DownloadHandlerTexture.GetContent(www);
+            onPick?.Invoke(sourceTexture);
+        }
+    }
+
+    // 将给定的 Texture2D 裁剪成圆形
+    public static Texture2D CreateCircularTexture(Texture2D sourceTexture)
+    {
+        int width = sourceTexture.width;
+        int height = sourceTexture.height;
+        int side = width > height ? height : width;
+
+        // 创建一个新的 RenderTexture 作为裁剪后的结果
+        RenderTexture rt = new RenderTexture(width, height, 0);
+        RenderTexture.active = rt;
+
+        // 在 RenderTexture 上绘制圆形图案
+        Graphics.Blit(sourceTexture, rt);
+
+        // 创建一个新的 Texture2D 以存储裁剪后的结果
+        Texture2D circularTexture = new Texture2D(side, side);
+        circularTexture.ReadPixels(new Rect(0, 0, side, side), 0, 0);
+        circularTexture.Apply();
+
+        // 释放资源
+        RenderTexture.active = null;
+        GameObject.Destroy(rt);
+
+        // 将裁剪后的 Texture2D 返回
+        return circularTexture;
     }
 }

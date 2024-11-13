@@ -22,6 +22,9 @@ public class PersonView : MainViewChild
     {
         UserData.Instance.OnDataChanged += OnDataChanged;
         _logoutButton.onClick.AddListener(LogoutPopup.Open);
+        _editButton.onClick.AddListener(EditProfileView.Open);
+        _blockListButton.onClick.AddListener(BlockListView.Open);
+        _feedbackButton.onClick.AddListener(FeedBackView.Open);
     }
 
     private void OnDestroy()
@@ -38,7 +41,7 @@ public class PersonView : MainViewChild
     private void RefreshUserInfo()
     {
         _textName.text = UserData.Instance.UserName;
-        _imgHead.sprite = Utils.GetUserHead(UserData.Instance.UserHead);
+        _imgHead.sprite = Utils.GetMyHead();//Utils.GetUserHead(UserData.Instance.UserHead);
         _textGold.text = Utils.FormatGold(UserData.Instance.Gold);
     }
     
