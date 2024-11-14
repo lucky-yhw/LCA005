@@ -18,15 +18,15 @@ public class BlockListView : MonoBehaviour
         {
             Destroy(gameObject);
         });
-        UserData.Instance.OnDataChanged += OnDataChanged;
+        UserData.Instance.OnBlockChanged += OnBlockChanged;
     }
 
     private void OnDestroy()
     {
-        UserData.Instance.OnDataChanged -= OnDataChanged;
+        UserData.Instance.OnBlockChanged -= OnBlockChanged;
     }
 
-    private void OnDataChanged()
+    private void OnBlockChanged()
     {
         RefreshUI();
     }

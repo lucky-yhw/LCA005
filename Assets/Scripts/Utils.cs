@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using LitJson;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,11 +12,11 @@ using Random = UnityEngine.Random;
 
 public static class Utils
 {
-    public const float GOLD_RATE = 10000f;
+    public const int GOLD_RATE = 10000;
     public const int HEAD_MAX = 10;
     public const int NAME_MAX = 20;
     public const int DESCRIPTION_MAX = 200;
-    public const int WIN_GIFT_GOLD = 20;
+    public const int WIN_GIFT_GOLD = 200000;
     
     public static T ForceRebuildImmediate<T>(this T comp, bool withChildren = false) where T : Component
     {
@@ -58,7 +59,7 @@ public static class Utils
 
     public static string FormatGold(long gold)
     {
-        return (gold / GOLD_RATE).ToString("N2");
+        return (gold / (float)GOLD_RATE).ToString("N2");
     }
 
     public static string FormatTime(int totalSeconds)
@@ -71,14 +72,22 @@ public static class Utils
     public static List<PersonConfig> RandomPerson(int count)
     {
         var personConfigTable = ConfigLoader.Load<PersonConfigTable>();
-        //随机十个人 
+        //随机十个人
         List<PersonConfig> ranPerson = new List<PersonConfig>();
         List<PersonConfig> configs = new List<PersonConfig>(personConfigTable.table.Values);
         for (int i = 0; i < count; i++)
         {
             var ran = Random.Range(0, configs.Count);
-            ranPerson.Add(configs[ran]);
-            configs.RemoveAt(ran);
+            var p = configs[ran];
+            if (!UserData.Instance.BlockList.Contains(p.id) && !UserData.Instance.HasChat(p.id))
+            {
+                ranPerson.Add(configs[ran]);
+                configs.RemoveAt(ran);
+            }
+            else
+            {
+                configs.RemoveAt(ran);
+            }
             if (configs.Count == 0)
             {
                 break;

@@ -291,9 +291,9 @@ MonoBehaviour:
   _buttonSend: {fileID: 611307251976828082}
   _buttonReturn: {fileID: 9010704821744540136}
   _winnerHeadImg: {fileID: 1489774284394290792}
-  _failerHeadImg: {fileID: 8043539753261626967}
   _textWinnerScore: {fileID: 1693567727075774740}
   _textWinnerName: {fileID: 746782370127748435}
+  _failerHeadImg: {fileID: 8043539753261626967}
   _textFailerScore: {fileID: 5253961360916951353}
   _textFailerName: {fileID: 7447107199340242011}
   _textCoins: {fileID: 7908483826064407519}

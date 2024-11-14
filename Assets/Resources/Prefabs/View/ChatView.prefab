@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 189268022375013273}
   - component: {fileID: 1132792180414678524}
   - component: {fileID: 1042217338447047926}
+  - component: {fileID: 6201362627491430357}
   m_Layer: 5
   m_Name: OptionsButton
   m_TagString: Untagged
@@ -116,7 +117,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 6201362627491430357}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -137,6 +138,22 @@ MonoBehaviour:
   downDuration: 0.2
   upDuration: 0.1
   resetDuration: 0.1
+--- !u!114 &6201362627491430357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543149706923167718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b4628c6296f8c44287af6d3ee6c18bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &595259385892584383
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,11 +773,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: f62aabfd8949cfd4cb8ac62145334793, type: 3}
-    m_FontSize: 45
+    m_FontSize: 78
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 4
-    m_MaxSize: 45
+    m_MaxSize: 83
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1666,7 +1683,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 5258119922627928570}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1

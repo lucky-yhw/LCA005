@@ -5,6 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public delegate void UserDataChangeDalegate();
+public delegate void BlockChangeDelegate();
 
 [Serializable]
 public class SerializableTexture
@@ -82,6 +83,7 @@ public class UserData
     [SerializeField] private List<int> _blockList = new List<int>();
 
     public UserDataChangeDalegate OnDataChanged;
+    public BlockChangeDelegate OnBlockChanged;
     
     public string UserName
     {
@@ -223,6 +225,7 @@ public class UserData
         {
             _blockList.Add(personId);
             OnDataChanged?.Invoke();
+            OnBlockChanged?.Invoke();
             Save();
         }
     }
@@ -233,7 +236,21 @@ public class UserData
         {
             _blockList.Remove(personId);
             OnDataChanged?.Invoke();
+            OnBlockChanged?.Invoke();
             Save();
         }
+    }
+
+    public bool HasChat(int personId)
+    {
+        foreach (var chat in _chatDataList)
+        {
+            if (chat.personId == personId)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -12,10 +12,19 @@ public class GameHomeView : MainViewChild
     [SerializeField] private Text _goldText;
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private GameObject _itemPrefab;
+    [SerializeField] private Button _buttonPurchase;
+
+    private void Awake()
+    {_buttonPurchase.onClick.AddListener(() =>
+        {
+            PurchaseView.Open();
+        });
+    }
 
     public override void OnShow()
     {
         UserData.Instance.OnDataChanged += OnDataChanged;
+        UserData.Instance.OnBlockChanged += RefreshChallengePeople;
         RefreshUserData();
         RefreshChallengePeople();
     }
@@ -23,6 +32,7 @@ public class GameHomeView : MainViewChild
     public override void OnHide()
     {
         UserData.Instance.OnDataChanged -= OnDataChanged;
+        UserData.Instance.OnBlockChanged -= RefreshChallengePeople;
     }
 
     private void OnDataChanged()

@@ -28,6 +28,12 @@ public class ChallengeItem : MonoBehaviour
         _reportButton.onClick.AddListener(() =>
         {
             //举报
+            // CommonTipsView.Open("Are You Sure To Report This User?", () =>
+            // {
+            //     UserData.Instance.Block(config.id);
+            // });
+            
+            ReportView.Open(config.id);
         });
     }
 }

@@ -14,16 +14,21 @@ using Random = UnityEngine.Random;
 public class GameView : MonoBehaviour
 {
     public static readonly int ICON_CLEAR_COUNT = 3;
-    public static readonly float ICON_COLLECT_DURATION = 0.3f;
+    public static readonly float ICON_COLLECT_DURATION = 0.2f;
     public static readonly int COLLECTION_LAYER = 5000;
     public static readonly int REMOVE_ITEM_COUNT = 3;
     public static readonly int REMOVE_ITEM_Y = 9;
     public static readonly int REMOVE_ITEM_X = 0;
 
+    public static readonly int UNDO_GOLD = 5*Utils.GOLD_RATE;
+    public static readonly int REFRESH_GOLD = 5*Utils.GOLD_RATE;
+    public static readonly int REMOVE_GOLD = 10*Utils.GOLD_RATE;
+
     [SerializeField] private List<Transform> _clearBox;
-    [SerializeField] private Button _buttonRestart;
+    [SerializeField] private Button _buttonUndo;
     [SerializeField] private Button _buttonRemove;
     [SerializeField] private Button _buttonRefresh;
+    [SerializeField] private Button _buttonClose;
     [SerializeField] private Text _textMyScore;
     [SerializeField] private Text _textOppScore;
     [SerializeField] private Text _textMyName;
@@ -46,9 +51,13 @@ public class GameView : MonoBehaviour
 
     private void Awake()
     {
-        _buttonRestart.onClick.AddListener(() => { Undo(); });
-        _buttonRefresh.onClick.AddListener(() => { Flush(); });
-        _buttonRemove.onClick.AddListener(() => { RemoveClearBox(); });
+        _buttonUndo.onClick.AddListener(Undo);
+        _buttonRefresh.onClick.AddListener(Flush);
+        _buttonRemove.onClick.AddListener(RemoveClearBox);
+        _buttonClose.onClick.AddListener(() =>
+        {
+            CommonTipsView.Open("Are Your Sure To Quit?",()=>{Destroy(gameObject);});
+        });
         _currentEventSystem = EventSystem.current;
     }
 
@@ -85,6 +94,7 @@ public class GameView : MonoBehaviour
     {
         ChangeMyScore(0);
         _buttonRemove.interactable = true;
+        _buttonUndo.interactable = false;
         Utils.DestroyAll(_gameContainer);
         foreach (var t in _clearBox)
         {
@@ -131,6 +141,7 @@ public class GameView : MonoBehaviour
         _lastPos = icon.position;
         _gameIcons.Remove(icon);
         _collectIcons.Add(icon);
+        _buttonUndo.interactable = true;
         _currentEventSystem.enabled = false;
         icon.transform.SetParent(_clearBox[_collectIcons.IndexOf(icon)]);
         icon.transform.DOMove(_clearBox[_collectIcons.IndexOf(icon)].position, ICON_COLLECT_DURATION);
@@ -162,6 +173,10 @@ public class GameView : MonoBehaviour
             }
 
             ChangeMyScore(_currentScore + ICON_CLEAR_COUNT);
+            if (removal.Contains(_lastIcon))
+            {
+                _buttonUndo.interactable = false;
+            }
         }
 
         if (_gameIcons.Count == 0)
@@ -219,6 +234,15 @@ public class GameView : MonoBehaviour
     {
         if (_lastIcon)
         {
+            if (UserData.Instance.Gold < UNDO_GOLD)
+            {
+                MsgView.Open("Gold Not Enough");
+                return;
+            }
+
+            UserData.Instance.Gold -= UNDO_GOLD;
+
+            _buttonUndo.interactable = false;
             _collectIcons.Remove(_lastIcon);
             _gameIcons.Add(_lastIcon);
             _lastIcon.transform.SetParent(_gameContainer);
@@ -232,6 +256,13 @@ public class GameView : MonoBehaviour
     
     public void Flush()
     {
+        if (UserData.Instance.Gold < REFRESH_GOLD)
+        {
+            MsgView.Open("Gold Not Enough");
+            return;
+        }
+
+        UserData.Instance.Gold -= REFRESH_GOLD;
         List<Vector2> positions = new List<Vector2>();
         List<int> layers = new List<int>();
         List<GameIcon> icons = new List<GameIcon>(_gameIcons);
@@ -264,9 +295,18 @@ public class GameView : MonoBehaviour
     {
         if (_collectIcons.Count < REMOVE_ITEM_COUNT)
         {
+            MsgView.Open(string.Format("Please Collect {0} Icons First!",REMOVE_ITEM_COUNT));
             return;
         }
 
+        if (UserData.Instance.Gold < REMOVE_GOLD)
+        {
+            MsgView.Open("Gold Not Enough");
+            return;
+        }
+
+        UserData.Instance.Gold -= REMOVE_GOLD;
+        
         _buttonRemove.interactable = false;
         for (int i = 0; i < REMOVE_ITEM_COUNT; i++)
         {

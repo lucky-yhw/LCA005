@@ -21,8 +21,17 @@ public class ChatView : MonoBehaviour
     {
         UserData.Instance.OnDataChanged += OnUserChanged;
         _buttonClose.onClick.AddListener(() => { Destroy(gameObject); });
-        _buttonReport.onClick.AddListener(() => { });
-        _buttonPicture.onClick.AddListener(() => { });
+        _buttonReport.onClick.AddListener(() =>
+        {
+            ReportView.Open(_personId);
+        });
+        _buttonPicture.onClick.AddListener(() =>
+        {
+            Utils.PickImage((s) =>
+            {
+                UserData.Instance.SaveChat(_personId, true, _inputField.text, new SerializableTexture(s));
+            });
+        });
         _buttonSend.onClick.AddListener(() =>
         {
             if (!string.IsNullOrEmpty(_inputField.text))
@@ -66,7 +75,6 @@ public class ChatView : MonoBehaviour
             var line = chatData.chatLines[index];
             if (!string.IsNullOrEmpty(line.content))
             {
-                Debug.Log(line.content);
                 tr.Find("MyChat/BG/TextContent").GetComponent<Text>().text = chatData.chatLines[index].content;
                 tr.Find("MyChat/BG/TextContent").gameObject.SetActive(true);
             }
