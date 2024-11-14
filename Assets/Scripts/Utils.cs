@@ -15,6 +15,8 @@ public static class Utils
     public const int HEAD_MAX = 10;
     public const int NAME_MAX = 20;
     public const int DESCRIPTION_MAX = 200;
+    public const int WIN_GIFT_GOLD = 20;
+    
     public static T ForceRebuildImmediate<T>(this T comp, bool withChildren = false) where T : Component
     {
         if (withChildren)

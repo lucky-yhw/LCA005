@@ -34,14 +34,19 @@ public class GameView : MonoBehaviour
     [SerializeField] private GameObject _itemPrefab;
 
     private int _currentScore = 0;
+    private int _oppId;
 
     private List<GameIcon> _gameIcons = new List<GameIcon>();
     private List<GameIcon> _collectIcons = new List<GameIcon>();
     private EventSystem _currentEventSystem;
 
+    private Vector2 _lastPos;
+    private int _lastLayer;
+    private GameIcon _lastIcon = null;
+
     private void Awake()
     {
-        _buttonRestart.onClick.AddListener(() => { StartGame(); });
+        _buttonRestart.onClick.AddListener(() => { Undo(); });
         _buttonRefresh.onClick.AddListener(() => { Flush(); });
         _buttonRemove.onClick.AddListener(() => { RemoveClearBox(); });
         _currentEventSystem = EventSystem.current;
@@ -49,6 +54,7 @@ public class GameView : MonoBehaviour
 
     private void Init(int personId)
     {
+        _oppId = personId;
         _textMyName.text = UserData.Instance.UserName;
         _textMyScore.text = _currentScore.ToString();
         _imgMyHead.sprite = Utils.GetMyHead();//Utils.GetUserHead(UserData.Instance.UserHead);
@@ -120,6 +126,9 @@ public class GameView : MonoBehaviour
         {
             return;
         }
+        _lastIcon = icon;
+        _lastLayer = icon.layer;
+        _lastPos = icon.position;
         _gameIcons.Remove(icon);
         _collectIcons.Add(icon);
         _currentEventSystem.enabled = false;
@@ -157,14 +166,15 @@ public class GameView : MonoBehaviour
 
         if (_gameIcons.Count == 0)
         {
-            Debug.Log("Game Win");
+            Destroy(gameObject);
+            GameEndView.OpenWin(_currentScore,_oppId);
             yield break;
         }
         
         if (_collectIcons.Count == _clearBox.Count)
         {
-            Debug.Log("GameEnd");
-            StartGame();
+            Destroy(gameObject);
+            GameEndView.OpenFail();
         }
     }
 
@@ -205,6 +215,21 @@ public class GameView : MonoBehaviour
         }
     }
 
+    public void Undo()
+    {
+        if (_lastIcon)
+        {
+            _collectIcons.Remove(_lastIcon);
+            _gameIcons.Add(_lastIcon);
+            _lastIcon.transform.SetParent(_gameContainer);
+            _lastIcon.status = IconStatus.Game;
+            _lastIcon.position = _lastPos;
+            _lastIcon.layer = _lastLayer;
+            _lastIcon = null;
+            ResortAll();
+        }
+    }
+    
     public void Flush()
     {
         List<Vector2> positions = new List<Vector2>();
