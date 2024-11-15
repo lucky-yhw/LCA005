@@ -20,9 +20,9 @@ public class GameView : MonoBehaviour
     public static readonly int REMOVE_ITEM_Y = 9;
     public static readonly int REMOVE_ITEM_X = 0;
 
-    public static readonly int UNDO_GOLD = 5*Utils.GOLD_RATE;
-    public static readonly int REFRESH_GOLD = 5*Utils.GOLD_RATE;
-    public static readonly int REMOVE_GOLD = 10*Utils.GOLD_RATE;
+    public static readonly int UNDO_GOLD = 5*Const.GoldRate;
+    public static readonly int REFRESH_GOLD = 5*Const.GoldRate;
+    public static readonly int REMOVE_GOLD = 10*Const.GoldRate;
 
     [SerializeField] private List<Transform> _clearBox;
     [SerializeField] private Button _buttonUndo;

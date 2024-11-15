@@ -64,8 +64,8 @@ public class GameEndView : MonoBehaviour
             _textWinnerScore.text = personConfig.score.ToString();
         }
 
-        _textCoins.text = Utils.FormatGold(Utils.WIN_GIFT_GOLD);
-        UserData.Instance.Gold += Utils.WIN_GIFT_GOLD;
+        _textCoins.text = Utils.FormatGold(Const.WinGiftGold);
+        UserData.Instance.Gold += Const.WinGiftGold;
     }
 
     private void InitFail()

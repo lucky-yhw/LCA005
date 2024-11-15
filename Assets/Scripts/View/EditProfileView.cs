@@ -24,7 +24,7 @@ public class EditProfileView : MonoBehaviour
     {
         UserData.Instance.OnDataChanged += OnDataChanged;
         _photoButtonSprite = _imgBackground.sprite;
-        Utils.RefreshListItems(_scrollRect,_avatarItemPrefab,Utils.HEAD_MAX,((i, o) =>
+        Utils.RefreshListItems(_scrollRect,_avatarItemPrefab,Const.HeadMax,((i, o) =>
         {
             var headId = i + 1;
             o.transform.Find("Icon").GetComponent<Image>().sprite = Utils.GetUserHead(headId);
@@ -80,9 +80,9 @@ public class EditProfileView : MonoBehaviour
     {
         _imgPlayerHead.sprite = Utils.GetMyHead(); //Utils.GetUserHead(UserData.Instance.UserHead);
         _inputFieldName.text = UserData.Instance.UserName;
-        _textNameCount.text = UserData.Instance.UserName.Length + "/" + Utils.NAME_MAX;
+        _textNameCount.text = UserData.Instance.UserName.Length + "/" + Const.NameMax;
         _inputFieldSignature.text = UserData.Instance.UserDescription;
-        _textSignatureCount.text = UserData.Instance.UserDescription.Length + "/" + Utils.DESCRIPTION_MAX;
+        _textSignatureCount.text = UserData.Instance.UserDescription.Length + "/" + Const.DescriptionMax;
         if (UserData.Instance.Background != null && UserData.Instance.Background.textureData != null && UserData.Instance.Background.textureData.Length > 0)
         {
             _imgBackground.sprite = Sprite.Create(UserData.Instance.Background.ToTexture2D(),

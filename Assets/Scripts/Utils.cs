@@ -12,12 +12,6 @@ using Random = UnityEngine.Random;
 
 public static class Utils
 {
-    public const int GOLD_RATE = 10000;
-    public const int HEAD_MAX = 10;
-    public const int NAME_MAX = 20;
-    public const int DESCRIPTION_MAX = 200;
-    public const int WIN_GIFT_GOLD = 200000;
-    
     public static T ForceRebuildImmediate<T>(this T comp, bool withChildren = false) where T : Component
     {
         if (withChildren)
@@ -59,7 +53,7 @@ public static class Utils
 
     public static string FormatGold(long gold)
     {
-        return (gold / (float)GOLD_RATE).ToString("N2");
+        return (gold / (float)Const.GoldRate).ToString("N2");
     }
 
     public static string FormatTime(int totalSeconds)
