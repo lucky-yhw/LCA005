@@ -12,13 +12,16 @@ public static class Const
 
     public static readonly IReadOnlyList<string> ProductIdList = new List<string>()
     {
-        "test1", "test2", "test3"
+        "coin_test_1", "coin_test_2", "coin_test_3"
     };
 
     public static readonly IReadOnlyDictionary<string, long> InAppPurchaseId2Coins = new Dictionary<string, long>()
     {
-        {"test1", 20000},
-        {"test2", 40000},
-        {"test3", 80000}
+        {"coin_test_1", 20000000},
+        {"coin_test_2", 40000000},
+        {"coin_test_3", 80000000}
     };
+    
+    public const string PrivacyPolicy = "https://app.kakkoonline.com/#/privacyAgreement";
+    public const string TermOfUse = "https://app.kakkoonline.com/#/usersAgreement";
 }

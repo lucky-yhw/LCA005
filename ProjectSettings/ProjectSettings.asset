@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 0
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Exciting Match Studio
-  productName: Exciting Match
+  companyName: Eliminate Studio
+  productName: Eliminate Now
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.1254902, a: 1}
@@ -163,7 +163,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    iPhone: com.bingo.live.chat.social.game
+    iPhone: com.game.chat.eliminate.freinds
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -238,14 +238,14 @@ PlayerSettings:
   metalCompileShaderBinary: 0
   iOSRenderExtraFrameOnPause: 0
   iosCopyPluginsCodeInsteadOfSymlink: 0
-  appleDeveloperTeamID: 9MC3FQN39P
+  appleDeveloperTeamID: 
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
   VisionOSManualSigningProvisioningProfileID: 
   iOSManualSigningProvisioningProfileType: 0
   tvOSManualSigningProvisioningProfileType: 0
   VisionOSManualSigningProvisioningProfileType: 0
-  appleEnableAutomaticSigning: 1
+  appleEnableAutomaticSigning: 2
   iOSRequireARKit: 0
   iOSAutomaticallyDetectAndAddCapabilities: 1
   appleEnableProMotion: 0
@@ -289,7 +289,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: a9ed1ccd5b61541089b196b539f26501, type: 3}
+      m_Icon: {fileID: 2800000, guid: d00fd75830a37784da0c7f3fe843a065, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -858,10 +858,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: b4df6699-3433-4b81-a5c5-0039a2cd6703
+  cloudProjectId: 83b394f7-5d44-4e34-ad6f-8ca70b2e9765
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 2048Animals
+  projectName: Exciting Match
   organizationId: yhwctt
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

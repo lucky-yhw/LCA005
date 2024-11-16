@@ -114,7 +114,7 @@ public class GameChatView : MainViewChild
     //打开聊天界面
     private void OpenVideoView(int personId)
     {
-        
+        CallView.Open(personId);
     }
 
     //打开通话界面
