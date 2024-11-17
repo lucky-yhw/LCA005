@@ -214,4 +214,10 @@ public static class Utils
         // 将裁剪后的 Texture2D 返回
         return circularTexture;
     }
+
+    public static string FormatSecondsStr(float seconds)
+    {
+        var s = TimeSpan.FromSeconds(seconds).ToString(@"hh\:mm\:ss");
+        return s;
+    }
 }

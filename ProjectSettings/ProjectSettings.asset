@@ -858,10 +858,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 83b394f7-5d44-4e34-ad6f-8ca70b2e9765
+  cloudProjectId: b4df6699-3433-4b81-a5c5-0039a2cd6703
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Exciting Match
+  projectName: 2048Animals
   organizationId: yhwctt
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

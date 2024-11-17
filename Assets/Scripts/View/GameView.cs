@@ -20,25 +20,30 @@ public class GameView : MonoBehaviour
     public static readonly int REMOVE_ITEM_Y = 9;
     public static readonly int REMOVE_ITEM_X = 0;
 
-    public static readonly int UNDO_GOLD = 5*Const.GoldRate;
-    public static readonly int REFRESH_GOLD = 5*Const.GoldRate;
-    public static readonly int REMOVE_GOLD = 10*Const.GoldRate;
+    public static readonly int UNDO_GOLD = 5 * Const.GoldRate;
+    public static readonly int REFRESH_GOLD = 5 * Const.GoldRate;
+    public static readonly int REMOVE_GOLD = 10 * Const.GoldRate;
 
     [SerializeField] private List<Transform> _clearBox;
     [SerializeField] private Button _buttonUndo;
+    [SerializeField] private Text _textUndoGold;
     [SerializeField] private Button _buttonRemove;
+    [SerializeField] private Text _textRemoveGold;
     [SerializeField] private Button _buttonRefresh;
+    [SerializeField] private Text _textRefreshGold;
     [SerializeField] private Button _buttonClose;
     [SerializeField] private Text _textMyScore;
     [SerializeField] private Text _textOppScore;
     [SerializeField] private Text _textMyName;
     [SerializeField] private Text _textOppName;
+    [SerializeField] private Text _textTime;
     [SerializeField] private Image _imgMyHead;
     [SerializeField] private Image _imgOppHead;
     [SerializeField] private Transform _gameContainer;
     [SerializeField] private GameObject _itemPrefab;
 
     private int _currentScore = 0;
+    private float _currentSeconds = 0;
     private int _oppId;
 
     private List<GameIcon> _gameIcons = new List<GameIcon>();
@@ -56,9 +61,12 @@ public class GameView : MonoBehaviour
         _buttonRemove.onClick.AddListener(RemoveClearBox);
         _buttonClose.onClick.AddListener(() =>
         {
-            CommonTipsView.Open("Are Your Sure To Quit?",()=>{Destroy(gameObject);});
+            CommonTipsView.Open("Are Your Sure To Quit?", () => { Destroy(gameObject); });
         });
         _currentEventSystem = EventSystem.current;
+        _textUndoGold.text = "X" + Utils.FormatGold(UNDO_GOLD);
+        _textRemoveGold.text = "X" + Utils.FormatGold(REMOVE_GOLD);
+        _textRefreshGold.text = "X" + Utils.FormatGold(REFRESH_GOLD);
     }
 
     private void Init(int personId)
@@ -66,7 +74,7 @@ public class GameView : MonoBehaviour
         _oppId = personId;
         _textMyName.text = UserData.Instance.UserName;
         _textMyScore.text = _currentScore.ToString();
-        _imgMyHead.sprite = Utils.GetMyHead();//Utils.GetUserHead(UserData.Instance.UserHead);
+        _imgMyHead.sprite = Utils.GetMyHead(); //Utils.GetUserHead(UserData.Instance.UserHead);
         var config = ConfigLoader.Load<PersonConfigTable>().table[personId];
         _imgOppHead.sprite = Utils.GetUserHead(config.head);
         _textOppScore.text = config.score.ToString();
@@ -103,6 +111,7 @@ public class GameView : MonoBehaviour
 
         _gameIcons.Clear();
         _collectIcons.Clear();
+        _currentSeconds = 0;
         var json = JsonMapper.ToObject(Resources.Load<TextAsset>("Configs/gameConfig").text);
         var cfg = json["levelConfig"][1]["iconPosition"];
         for (int i = 0; i < cfg.Count; i++)
@@ -127,6 +136,7 @@ public class GameView : MonoBehaviour
                 totalItems.RemoveAt(idx);
             }
         }
+
         ResortAll();
     }
 
@@ -136,6 +146,7 @@ public class GameView : MonoBehaviour
         {
             return;
         }
+
         _lastIcon = icon;
         _lastLayer = icon.layer;
         _lastPos = icon.position;
@@ -182,10 +193,10 @@ public class GameView : MonoBehaviour
         if (_gameIcons.Count == 0)
         {
             Destroy(gameObject);
-            GameEndView.OpenWin(_currentScore,_oppId);
+            GameEndView.OpenWin(new GameResult(){score = _currentScore,totalSeconds = _currentSeconds}, _oppId);
             yield break;
         }
-        
+
         if (_collectIcons.Count == _clearBox.Count)
         {
             Destroy(gameObject);
@@ -253,7 +264,7 @@ public class GameView : MonoBehaviour
             ResortAll();
         }
     }
-    
+
     public void Flush()
     {
         if (UserData.Instance.Gold < REFRESH_GOLD)
@@ -273,6 +284,7 @@ public class GameView : MonoBehaviour
             positions.Add(icon.position);
             layers.Add(icon.layer);
         }
+
         //打乱
         for (int i = 0; i < _gameIcons.Count; i++)
         {
@@ -288,6 +300,7 @@ public class GameView : MonoBehaviour
             icons[i].position = positions[i];
             icons[i].layer = layers[i];
         }
+
         ResortAll();
     }
 
@@ -295,7 +308,7 @@ public class GameView : MonoBehaviour
     {
         if (_collectIcons.Count < REMOVE_ITEM_COUNT)
         {
-            MsgView.Open(string.Format("Please Collect {0} Icons First!",REMOVE_ITEM_COUNT));
+            MsgView.Open(string.Format("Please Collect {0} Icons First!", REMOVE_ITEM_COUNT));
             return;
         }
 
@@ -306,7 +319,7 @@ public class GameView : MonoBehaviour
         }
 
         UserData.Instance.Gold -= REMOVE_GOLD;
-        
+
         _buttonRemove.interactable = false;
         for (int i = 0; i < REMOVE_ITEM_COUNT; i++)
         {
@@ -321,6 +334,13 @@ public class GameView : MonoBehaviour
                 icon.layer = 200;
             }
         }
+
         ResortAll();
+    }
+
+    private void Update()
+    {
+        _currentSeconds += Time.deltaTime;
+        _textTime.text = Utils.FormatSecondsStr(_currentSeconds);
     }
 }
