@@ -53,7 +53,7 @@ public static class Utils
 
     public static string FormatGold(long gold)
     {
-        return (gold / (float)Const.GoldRate).ToString("N2");
+        return (gold / (float)Const.GoldRate).ToString("N0");
     }
 
     public static string FormatTime(int totalSeconds)

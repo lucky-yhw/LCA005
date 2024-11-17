@@ -42,9 +42,10 @@ public class PurchaseView : MonoBehaviour
 
     private  void InitPurchaseItems()
     {
-        Utils.RefreshListItems(_scrollRect,_purchaseItemPrefab,Const.ProductIdList.Count,((i, o) =>
+        var products = InAppPurchaseManager.Instance.GetAllValidProducts();
+        Utils.RefreshListItems(_scrollRect,_purchaseItemPrefab,products.Length,((i, o) =>
         {
-            var productId = Const.ProductIdList[i];
+            var productId = products[i].definition.id;
             o.transform.Find("Gold/Text").GetComponent<Text>().text =
                 Utils.FormatGold(Const.InAppPurchaseId2Coins[productId]);
             o.transform.Find("Btn/Text").GetComponent<Text>().text =
