@@ -90,7 +90,7 @@ public class InAppPurchaseManager : IDetailedStoreListener
 
     public Product[] GetAllValidProducts()
     {
-        if (IsInitialized())
+        if (!IsInitialized())
         {
             return new Product[] { };
         }
