@@ -113,7 +113,8 @@ public class GameView : MonoBehaviour
         _collectIcons.Clear();
         _currentSeconds = 0;
         var json = JsonMapper.ToObject(Resources.Load<TextAsset>("Configs/gameConfig").text);
-        var cfg = json["levelConfig"][1]["iconPosition"];
+        var ran = Random.Range(0, json["levelConfig"].Count);
+        var cfg = json["levelConfig"][ran]["iconPosition"];
         for (int i = 0; i < cfg.Count; i++)
         {
             var go = GameObject.Instantiate(_itemPrefab, _gameContainer);
@@ -219,8 +220,8 @@ public class GameView : MonoBehaviour
                 //同一层级只有xy大于自己且不超过1才会遮挡
                 if (other.layer == icon.layer)
                 {
-                    if (other.position.y >= icon.position.y && other.position.x > icon.position.x &&
-                        other.position.y - icon.position.y < 1 && other.position.x - icon.position.x < 1)
+                    if (other.position.y > icon.position.y && other.position.x > icon.position.x &&
+                        Math.Abs(other.position.y - icon.position.y) < 1-1e-5 && Math.Abs(other.position.x - icon.position.x) < 1-1e-5)
                     {
                         interactable = false;
                         break;
@@ -228,8 +229,8 @@ public class GameView : MonoBehaviour
                 } //不同层级只要x,y相差绝对值都不大于1就形成遮挡
                 else if (other.layer > icon.layer)
                 {
-                    if (Math.Abs(other.position.y - icon.position.y) < 1 &&
-                        Math.Abs(other.position.x - icon.position.x) < 1)
+                    if (Math.Abs(other.position.y - icon.position.y) < 1-1e-5 &&
+                        Math.Abs(other.position.x - icon.position.x) < 1-1e-5)
                     {
                         interactable = false;
                         break;
