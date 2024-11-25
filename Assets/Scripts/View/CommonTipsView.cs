@@ -32,6 +32,7 @@ public class CommonTipsView : MonoBehaviour
         _textContent.text = content;
         this.onOk = onOk;
         this.onCancel = onCancel;
+        _buttonCancel.gameObject.SetActive(onCancel!=null);
     }
     
     public static void Open(string content,Action onOk = null, Action onCancel = null)

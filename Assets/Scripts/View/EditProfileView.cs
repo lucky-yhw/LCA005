@@ -40,6 +40,7 @@ public class EditProfileView : MonoBehaviour
                 if (t)
                 {
                     UserData.Instance.CustomerHead = new SerializableTexture(t);
+                    CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
                     RefreshUI();
                 }
             });
@@ -51,6 +52,7 @@ public class EditProfileView : MonoBehaviour
                 if (t)
                 {
                     UserData.Instance.Background = new SerializableTexture(t);
+                    CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
                     RefreshUI();
                 }
             });
@@ -58,11 +60,13 @@ public class EditProfileView : MonoBehaviour
         _inputFieldName.onEndEdit.AddListener((s) =>
         {
             UserData.Instance.UserName = s;
+            CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
         });
         
         _inputFieldSignature.onEndEdit.AddListener((s) =>
         {
             UserData.Instance.UserDescription = s;
+            CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
         });
         _backButton.onClick.AddListener(() =>
         {

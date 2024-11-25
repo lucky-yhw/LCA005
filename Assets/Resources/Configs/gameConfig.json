@@ -13,31 +13,6 @@
     [
         {
             "level":1,
-            "iconCount":18,
-            "iconPosition":
-            [
-                {"id":1,"position":[0,0,1]},
-                {"id":2,"position":[1.5,0,1]},
-                {"id":3,"position":[3,0,1]},
-                {"id":4,"position":[0,1.5,1]},
-                {"id":5,"position":[1.5,1.5,1]},
-                {"id":6,"position":[3,1.5,1]},
-                {"id":7,"position":[0,3,1]},
-                {"id":8,"position":[1.5,3,1]},
-                {"id":9,"position":[3,3,1]},
-                {"id":10,"position":[0,-0.5,2]},
-                {"id":11,"position":[1.5,-0.5,2]},
-                {"id":12,"position":[3,-0.5,2]},
-                {"id":13,"position":[0,1,2]},
-                {"id":14,"position":[1.5,1,2]},
-                {"id":15,"position":[3,1,2]},
-                {"id":16,"position":[0,2.5,2]},
-                {"id":17,"position":[1.5,2.5,2]},
-                {"id":18,"position":[3,2.5,2]} 
-            ]
-        },
-        {
-            "level":2,
             "iconCount":141,
             "iconPosition":
             [

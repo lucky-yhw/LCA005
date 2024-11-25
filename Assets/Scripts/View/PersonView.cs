@@ -20,6 +20,7 @@ public class PersonView : MainViewChild
     [SerializeField] private Button _policyButton;
     [SerializeField] private Button _rateButton;
     [SerializeField] private Button _logoutButton;
+    [SerializeField] private GameObject _goInReview;
 
     private void Awake()
     {
@@ -56,6 +57,7 @@ public class PersonView : MainViewChild
         _textName.text = UserData.Instance.UserName;
         _imgHead.sprite = Utils.GetMyHead(); //Utils.GetUserHead(UserData.Instance.UserHead);
         _textGold.text = Utils.FormatGold(UserData.Instance.Gold);
+        _goInReview.SetActive(UserData.Instance.InReview);
     }
 
     public override void OnShow()
