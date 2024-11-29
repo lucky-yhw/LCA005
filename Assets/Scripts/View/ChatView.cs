@@ -75,7 +75,14 @@ public class ChatView : MonoBehaviour
             var line = chatData.chatLines[index];
             if (!string.IsNullOrEmpty(line.content))
             {
-                tr.Find("MyChat/BG/TextContent").GetComponent<Text>().text = chatData.chatLines[index].content;
+                var str = chatData.chatLines[index].content;
+                var split = 40;
+                if (Utils.ContainsBlockCharacter(str))
+                {
+                    split = 16;
+                }
+                string content = Utils.AddNewLineEveryNCharacters(chatData.chatLines[index].content, split);
+                tr.Find("MyChat/BG/TextContent").GetComponent<Text>().text = content;
                 tr.Find("MyChat/BG/TextContent").gameObject.SetActive(true);
             }
 

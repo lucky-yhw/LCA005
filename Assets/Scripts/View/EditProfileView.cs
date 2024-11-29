@@ -30,7 +30,13 @@ public class EditProfileView : MonoBehaviour
             o.transform.Find("Icon").GetComponent<Image>().sprite = Utils.GetUserHead(headId);
             o.GetComponent<Button>().onClick.AddListener(() =>
             {
-                UserData.Instance.UserHead = headId;
+                if (headId != UserData.Instance.UserHead)
+                {
+                    LoadingView.OpenAutoClose(() =>
+                    {
+                        UserData.Instance.UserHead = headId;
+                    });   
+                }
             });
         }));
         _buttonPhoto.onClick.AddListener(() =>
@@ -39,9 +45,11 @@ public class EditProfileView : MonoBehaviour
             {
                 if (t)
                 {
-                    UserData.Instance.CustomerHead = new SerializableTexture(t);
-                    CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
-                    RefreshUI();
+                    LoadingView.OpenAutoClose(() =>
+                    {
+                        UserData.Instance.CustomerHead = new SerializableTexture(t);
+                        CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Informations");
+                    });
                 }
             });
         });
@@ -51,22 +59,36 @@ public class EditProfileView : MonoBehaviour
             {
                 if (t)
                 {
-                    UserData.Instance.Background = new SerializableTexture(t);
-                    CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
-                    RefreshUI();
+                    LoadingView.OpenAutoClose(() =>
+                    {
+                        UserData.Instance.Background = new SerializableTexture(t);
+                        CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations"); 
+                    });
                 }
             });
         });
         _inputFieldName.onEndEdit.AddListener((s) =>
         {
-            UserData.Instance.UserName = s;
-            CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
+            if (s != UserData.Instance.UserName)
+            {
+                LoadingView.OpenAutoClose(() =>
+                {
+                    UserData.Instance.UserName = s;
+                    CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
+                });   
+            }
         });
         
         _inputFieldSignature.onEndEdit.AddListener((s) =>
         {
-            UserData.Instance.UserDescription = s;
-            CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
+            if (s != UserData.Instance.UserDescription)
+            {
+                LoadingView.OpenAutoClose(() =>
+                {
+                    UserData.Instance.UserDescription = s;
+                    CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
+                });   
+            }
         });
         _backButton.onClick.AddListener(() =>
         {

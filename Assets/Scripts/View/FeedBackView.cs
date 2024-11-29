@@ -20,8 +20,13 @@ public class FeedBackView : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(_inputField.text))
             {
-                MsgView.Open("Submit Success");
-                Destroy(gameObject);
+                LoadingView.OpenAutoClose(() =>
+                {
+                    CommonTipsView.Open("Thank You For Feeding Back!", () =>
+                    {
+                        Destroy(gameObject);
+                    });
+                });
             }
             else
             {

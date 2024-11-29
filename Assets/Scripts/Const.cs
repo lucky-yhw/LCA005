@@ -5,7 +5,7 @@ using UnityEngine;
 public static class Const
 {
     public const int GoldRate = 10000;
-    public const int HeadMax = 10;
+    public const int HeadMax = 30;
     public const int NameMax = 20;
     public const int DescriptionMax = 200;
     public const int WinGiftGold = 200000;

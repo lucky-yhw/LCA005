@@ -429,11 +429,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'fasdfasdfasdfdsa
-
-    fasdfadsfasdfasd
-
-    adsfasdfasdf'
+  m_Text: 
 --- !u!114 &2640628291238235723
 MonoBehaviour:
   m_ObjectHideFlags: 0
