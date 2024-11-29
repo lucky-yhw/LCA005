@@ -17,6 +17,7 @@
 
 #Builds
 /[Bb]uilds/
+/[Bb]uild/
 
 #LocalToolsSo
 /[Aa]ssets/LocalTools*
