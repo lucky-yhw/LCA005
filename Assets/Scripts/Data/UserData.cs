@@ -81,6 +81,7 @@ public class UserData
     [SerializeField] private long _gold;
     [SerializeField] private List<ChatData> _chatDataList = new List<ChatData>();
     [SerializeField] private List<int> _blockList = new List<int>();
+    [SerializeField] private bool _inReview = false;
 
     public UserDataChangeDalegate OnDataChanged;
     public BlockChangeDelegate OnBlockChanged;
@@ -91,6 +92,7 @@ public class UserData
         set
         {
             _userName = value;
+            _inReview = true;
             OnDataChanged?.Invoke();
             Save();
         }
@@ -113,6 +115,7 @@ public class UserData
         set
         {
             _userDescription = value;
+            _inReview = true;
             OnDataChanged?.Invoke();
             Save();
         }
@@ -146,6 +149,7 @@ public class UserData
         set
         {
             _customerHead = value;
+            _inReview = true;
             OnDataChanged?.Invoke();
             Save();
         }
@@ -157,11 +161,14 @@ public class UserData
         set
         {
             _background = value;
+            _inReview = true;
             OnDataChanged?.Invoke();
             Save();
         }
     }
     
+    public bool InReview => _inReview;
+
     public IReadOnlyList<ChatData> ChatDataList => _chatDataList;
 
     public IReadOnlyList<int> BlockList => _blockList;

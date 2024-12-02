@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using LitJson;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -219,5 +221,28 @@ public static class Utils
     {
         var s = TimeSpan.FromSeconds(seconds).ToString(@"hh\:mm\:ss");
         return s;
+    }
+    
+    public static string AddNewLineEveryNCharacters(string input, int n)
+    {
+        if (input == null) throw new ArgumentNullException(nameof(input));
+        if (n <= 0) throw new ArgumentOutOfRangeException(nameof(n), "n must be a positive integer.");
+ 
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < input.Length; i += n)
+        {
+            sb.Append(input.Substring(i, Math.Min(n, input.Length - i)));
+            if (i + n < input.Length)
+            {
+                sb.Append(Environment.NewLine);
+            }
+        }
+        return sb.ToString();
+    }
+    
+    public static bool ContainsBlockCharacter(string input)
+    {
+        Regex chineseCharRegex = new Regex("[\\u4e00-\\u9fa5]");
+        return chineseCharRegex.IsMatch(input);
     }
 }

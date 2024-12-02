@@ -83,6 +83,10 @@ public class GameChatView : MainViewChild
                 //打开通话界面
                 OpenVideoView(config.id);
             });
+            trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() =>
+            {
+                ReportView.Open(config.id);
+            });
         }));
     }
 
@@ -107,6 +111,10 @@ public class GameChatView : MainViewChild
             trans.Find("Btn_Video").GetComponent<Button>().onClick.AddListener(() =>
             {
                 OpenVideoView(config.id);
+            });
+            trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() =>
+            {
+                ReportView.Open(config.id);
             });
         }));
     }

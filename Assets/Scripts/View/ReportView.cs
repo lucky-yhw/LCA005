@@ -10,24 +10,28 @@ public class ReportView : MonoBehaviour
     [SerializeField] private Button _submitButton;
 
     private int _personId;
-    
+
     private void Awake()
     {
-        _backButton.onClick.AddListener(() =>
-        {
-            Destroy(gameObject);
-        });
+        _backButton.onClick.AddListener(() => { Destroy(gameObject); });
         _submitButton.onClick.AddListener(() =>
         {
             if (!string.IsNullOrEmpty(_inputField.text))
             {
                 UserData.Instance.Block(_personId);
-                MsgView.Open("Submit Success");
-                Destroy(gameObject);
+                LoadingView.OpenAutoClose(() =>
+                {
+                    CommonTipsView.Open(
+                        "We will thoroughly review the information you have reported, and we will address it within 72 hours. Thank you for your feedback and report.",
+                        () =>
+                        {
+                            Destroy(gameObject); 
+                        });
+                });
             }
             else
             {
-                MsgView.Open("Please Enter Your Suggestions!");
+                MsgView.Open("Input Can't Be Empty");
             }
         });
     }
@@ -39,7 +43,8 @@ public class ReportView : MonoBehaviour
 
     public static void Open(int personId)
     {
-        var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/ReportView"),Main.Instance.canvas.transform);
+        var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/ReportView"),
+            Main.Instance.canvas.transform);
         var script = go.GetComponent<ReportView>();
         script.Init(personId);
     }
