@@ -13,9 +13,18 @@ public class LaunchView : MonoBehaviour
     {
         _progressBar.fillAmount = 0;
         MainView.Open();
-        _progressBar.DOFillAmount(1, 5).OnComplete(() =>
+        _progressBar.DOFillAmount(0.9f, 3f).SetEase(Ease.Linear);
+        Sequence seq = DOTween.Sequence();
+        seq.InsertCallback(1f, () =>
         {
-            gameObject.SetActive(false);
+            ServerData.Instance.Login(() =>
+            {
+                DOTween.Kill(_progressBar);
+                _progressBar.DOFillAmount(1f, 0.5f).OnComplete(() =>
+                {
+                    Destroy(gameObject);
+                });
+            });
         });
     }
 }
