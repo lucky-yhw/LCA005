@@ -15,16 +15,15 @@ public class LaunchView : MonoBehaviour
         MainView.Open();
         _progressBar.DOFillAmount(0.9f, 3f).SetEase(Ease.Linear);
         Sequence seq = DOTween.Sequence();
-        seq.InsertCallback(1f, () =>
+        seq.InsertCallback(1f, Login);
+    }
+
+    private void Login()
+    {
+        ServerData.Instance.Login(() =>
         {
-            ServerData.Instance.Login(() =>
-            {
-                DOTween.Kill(_progressBar);
-                _progressBar.DOFillAmount(1f, 0.5f).OnComplete(() =>
-                {
-                    Destroy(gameObject);
-                });
-            });
-        });
+            DOTween.Kill(_progressBar);
+            _progressBar.DOFillAmount(1f, 0.5f).OnComplete(() => { Destroy(gameObject); });
+        }, () => { CommonTipsView.Open("Login Failed! Please Try Again!", Login); });
     }
 }

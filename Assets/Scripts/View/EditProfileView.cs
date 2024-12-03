@@ -19,12 +19,12 @@ public class EditProfileView : MonoBehaviour
     [SerializeField] private Button _backButton;
 
     private Sprite _photoButtonSprite;
-    
+
     private void Awake()
     {
         UserData.Instance.OnDataChanged += OnDataChanged;
         _photoButtonSprite = _imgBackground.sprite;
-        Utils.RefreshListItems(_scrollRect,_avatarItemPrefab,Const.HeadMax,((i, o) =>
+        Utils.RefreshListItems(_scrollRect, _avatarItemPrefab, Const.HeadMax, ((i, o) =>
         {
             var headId = i + 1;
             o.transform.Find("Icon").GetComponent<Image>().sprite = Utils.GetUserHead(headId);
@@ -32,71 +32,90 @@ public class EditProfileView : MonoBehaviour
             {
                 if (headId != UserData.Instance.UserHead)
                 {
-                    LoadingView.OpenAutoClose(() =>
-                    {
-                        UserData.Instance.UserHead = headId;
-                    });   
+                    LoadingView.Open();
+                    ServerData.Instance.ModifyUserData(
+                        new Dictionary<string, string>() {{"user_header", headId.ToString()}}, () =>
+                        {
+                            UserData.Instance.UserHead = headId;
+                            LoadingView.Close();
+                        }, () =>
+                        {
+                            LoadingView.Close();
+                            CommonTipsView.Open("Modify Failed!",RefreshUI);
+                        });
                 }
             });
         }));
-        _buttonPhoto.onClick.AddListener(() =>
-        {
-            Utils.PickImage((t) =>
-            {
-                if (t)
-                {
-                    LoadingView.OpenAutoClose(() =>
-                    {
-                        UserData.Instance.CustomerHead = new SerializableTexture(t);
-                        CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Informations");
-                    });
-                }
-            });
-        });
-        _backgroundButton.onClick.AddListener(() =>
-        {
-            Utils.PickImage((t) =>
-            {
-                if (t)
-                {
-                    LoadingView.OpenAutoClose(() =>
-                    {
-                        UserData.Instance.Background = new SerializableTexture(t);
-                        CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations"); 
-                    });
-                }
-            });
-        });
+        // _buttonPhoto.onClick.AddListener(() =>
+        // {
+        //     Utils.PickImage((t) =>
+        //     {
+        //         if (t)
+        //         {
+        //             LoadingView.OpenAutoClose(() =>
+        //             {
+        //                 UserData.Instance.CustomerHead = new SerializableTexture(t);
+        //                 CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Informations");
+        //             });
+        //         }
+        //     });
+        // });
+        // _backgroundButton.onClick.AddListener(() =>
+        // {
+        //     Utils.PickImage((t) =>
+        //     {
+        //         if (t)
+        //         {
+        //             LoadingView.OpenAutoClose(() =>
+        //             {
+        //                 UserData.Instance.Background = new SerializableTexture(t);
+        //                 CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations"); 
+        //             });
+        //         }
+        //     });
+        // });
         _inputFieldName.onEndEdit.AddListener((s) =>
         {
             if (s != UserData.Instance.UserName)
             {
-                LoadingView.OpenAutoClose(() =>
-                {
-                    UserData.Instance.UserName = s;
-                    CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
-                });   
+                LoadingView.Open();
+                ServerData.Instance.ModifyUserData(
+                    new Dictionary<string, string>() {{"nick_name", s}}, () =>
+                    {
+                        UserData.Instance.UserName = s;
+                        LoadingView.Close();
+                        CommonTipsView.Open(
+                            "Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
+                    }, () =>
+                    {
+                        LoadingView.Close();
+                        CommonTipsView.Open("Modify Failed!",RefreshUI);
+                    });
             }
         });
-        
+
         _inputFieldSignature.onEndEdit.AddListener((s) =>
         {
             if (s != UserData.Instance.UserDescription)
             {
-                LoadingView.OpenAutoClose(() =>
-                {
-                    UserData.Instance.UserDescription = s;
-                    CommonTipsView.Open("Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
-                });   
+                ServerData.Instance.ModifyUserData(
+                    new Dictionary<string, string>() {{"user_sign", s}}, () =>
+                    {
+                        UserData.Instance.UserDescription = s;
+                        LoadingView.Close();
+                        CommonTipsView.Open(
+                            "Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
+                    }, () =>
+                    {
+                        LoadingView.Close();
+                        CommonTipsView.Open("Modify Failed!",RefreshUI);
+                    });
             }
         });
-        _backButton.onClick.AddListener(() =>
-        {
-            Destroy(gameObject);
-        });
+        _backButton.onClick.AddListener(() => { Destroy(gameObject); });
         RefreshUI();
     }
-    
+
     private void OnDestroy()
     {
         UserData.Instance.OnDataChanged -= OnDataChanged;
@@ -109,27 +128,29 @@ public class EditProfileView : MonoBehaviour
         _textNameCount.text = UserData.Instance.UserName.Length + "/" + Const.NameMax;
         _inputFieldSignature.text = UserData.Instance.UserDescription;
         _textSignatureCount.text = UserData.Instance.UserDescription.Length + "/" + Const.DescriptionMax;
-        if (UserData.Instance.Background != null && UserData.Instance.Background.textureData != null && UserData.Instance.Background.textureData.Length > 0)
+        if (UserData.Instance.Background != null && UserData.Instance.Background.textureData != null &&
+            UserData.Instance.Background.textureData.Length > 0)
         {
             _imgBackground.sprite = Sprite.Create(UserData.Instance.Background.ToTexture2D(),
                 new Rect(Vector2.zero,
                     new Vector2(UserData.Instance.Background.width, UserData.Instance.Background.height)),
-                new Vector2(0.5f, 0.5f));   
+                new Vector2(0.5f, 0.5f));
         }
         else
         {
             _imgBackground.sprite = _photoButtonSprite;
         }
     }
-    
+
     private void OnDataChanged()
     {
         RefreshUI();
     }
-    
-    
+
+
     public static void Open()
     {
-        GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/EditProfileView"),Main.Instance.canvas.transform);
+        GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/EditProfileView"),
+            Main.Instance.canvas.transform);
     }
 }

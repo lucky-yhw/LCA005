@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LitJson;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public delegate void UserDataChangeDalegate();
+
 public delegate void BlockChangeDelegate();
 
 [Serializable]
@@ -14,7 +16,7 @@ public class SerializableTexture
     public int width;
     public int height;
     public TextureFormat textureFormat;
- 
+
     public SerializableTexture(Texture2D texture)
     {
         textureData = texture.EncodeToPNG(); // 使用PNG编码作为示例
@@ -22,7 +24,7 @@ public class SerializableTexture
         height = texture.height;
         textureFormat = texture.format;
     }
- 
+
     public Texture2D ToTexture2D()
     {
         Texture2D texture = new Texture2D(width, height, textureFormat, false);
@@ -52,6 +54,7 @@ public class ChatData
 public class UserData
 {
     private static UserData _instance;
+
     public static UserData Instance
     {
         get
@@ -68,14 +71,18 @@ public class UserData
                     _instance = new UserData {_userName = "Guest_" + Random.Range(100000, 999999)};
                 }
             }
+
             return _instance;
         }
     }
-    
+
+    [SerializeField] private string _token = "";
+    [SerializeField] private int _userId = 0;
     [SerializeField] private string _userName = "";
     [SerializeField] private int _userAge = 18;
     [SerializeField] private string _userDescription = "empty description";
     [SerializeField] private int _userHead = 1;
+    [SerializeField] private int _sex = 1;
     [SerializeField] private SerializableTexture _customerHead;
     [SerializeField] private SerializableTexture _background;
     [SerializeField] private long _gold;
@@ -85,7 +92,7 @@ public class UserData
 
     public UserDataChangeDalegate OnDataChanged;
     public BlockChangeDelegate OnBlockChanged;
-    
+
     public string UserName
     {
         get => _userName;
@@ -97,7 +104,9 @@ public class UserData
             Save();
         }
     }
-    
+
+    public int UserId => _userId;
+
     public int UserAge
     {
         get => _userAge;
@@ -108,7 +117,7 @@ public class UserData
             Save();
         }
     }
-    
+
     public string UserDescription
     {
         get => _userDescription;
@@ -131,7 +140,7 @@ public class UserData
             Save();
         }
     }
-    
+
     public long Gold
     {
         get => _gold;
@@ -143,6 +152,27 @@ public class UserData
         }
     }
     
+    public string Token
+    {
+        get => _token;
+        set
+        {
+            _token = value;
+            Save();
+        }
+    }
+
+    public int Sex
+    {
+        get => _sex;
+        set
+        {
+            _sex = value;
+            OnDataChanged?.Invoke();
+            Save();
+        }
+    }
+
     public SerializableTexture CustomerHead
     {
         get => _customerHead;
@@ -154,7 +184,7 @@ public class UserData
             Save();
         }
     }
-    
+
     public SerializableTexture Background
     {
         get => _background;
@@ -166,16 +196,16 @@ public class UserData
             Save();
         }
     }
-    
+
     public bool InReview => _inReview;
 
     public IReadOnlyList<ChatData> ChatDataList => _chatDataList;
 
     public IReadOnlyList<int> BlockList => _blockList;
-    
+
     public void Save()
     {
-        PlayerPrefs.SetString("UserData",JsonUtility.ToJson(this));
+        PlayerPrefs.SetString("UserData", JsonUtility.ToJson(this));
         PlayerPrefs.Save();
     }
 
@@ -193,7 +223,7 @@ public class UserData
         return data;
     }
 
-    public void SaveChat(int personId,bool isMyChat,string content,SerializableTexture texture)
+    public void SaveChat(int personId, bool isMyChat, string content, SerializableTexture texture)
     {
         var chatLine = new ChatLine
         {
@@ -211,9 +241,10 @@ public class UserData
 
         if (data == null)
         {
-            data = new ChatData {personId = personId, chatLines = new List<ChatLine>()};   
+            data = new ChatData {personId = personId, chatLines = new List<ChatLine>()};
             _chatDataList.Add(data);
         }
+
         data.chatLines.Add(chatLine);
         OnDataChanged?.Invoke();
         Save();
@@ -222,7 +253,7 @@ public class UserData
     public void Delete()
     {
         _instance = null;
-        PlayerPrefs.SetString("UserData","");
+        PlayerPrefs.SetString("UserData", "");
         PlayerPrefs.Save();
     }
 
@@ -259,5 +290,56 @@ public class UserData
         }
 
         return false;
+    }
+
+    public void InitByServerData(JsonData data)
+    {
+        if (data.ContainsKey("user_header"))
+        {
+            var userHeader = data["user_header"].ToString();
+            if (string.IsNullOrEmpty(userHeader))
+            {
+                _userHead = 1;
+            }
+            else
+            {
+                _userHead = int.Parse(userHeader);
+            }   
+        }
+
+        if (data.ContainsKey("nick_name"))
+        {
+            _userName = data["nick_name"].ToString();
+        }
+
+        if (data.ContainsKey("user_id"))
+        {
+            _userId = (int) data["user_id"];
+        }
+
+        if (data.ContainsKey("age"))
+        {
+            _userAge = (int) data["age"];
+        }
+
+        if (data.ContainsKey("chips"))
+        {
+            _gold = (long) data["chips"];
+        }
+
+        if (data.ContainsKey("sex"))
+        {
+            if (!int.TryParse(data["sex"].ToString(),out _sex))
+            {
+                _sex = -1;
+            }
+        }
+
+        if (data.ContainsKey("user_sign"))
+        {
+            _userDescription = data["user_sign"] == null ? "" : data["user_sign"].ToString();
+        }
+
+        Save();
     }
 }

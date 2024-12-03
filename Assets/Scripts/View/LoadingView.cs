@@ -60,7 +60,7 @@ public class LoadingView : MonoBehaviour
         _instance.AutoClose();   
     }
     
-    public static void Open(Action onFinished)
+    public static void Open(Action onFinished = null)
     {
         LoadView();
         _instance._onFinished += onFinished;
