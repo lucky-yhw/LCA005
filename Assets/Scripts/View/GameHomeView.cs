@@ -14,6 +14,8 @@ public class GameHomeView : MainViewChild
     [SerializeField] private GameObject _itemPrefab;
     [SerializeField] private Button _buttonPurchase;
 
+    private bool _challengeListShouldRefresh = true;
+    
     private void Awake()
     {_buttonPurchase.onClick.AddListener(() =>
         {
@@ -49,8 +51,18 @@ public class GameHomeView : MainViewChild
 
     private void RefreshChallengePeople()
     {
-        var ranPerson = Utils.RandomPerson(10);
-        Utils.RefreshListItems(_scrollRect, _itemPrefab, ranPerson.Count,
-            ((i, o) => { o.GetComponent<ChallengeItem>().UpdateData(ranPerson[i]); }));
+        if (!_challengeListShouldRefresh)
+        {
+            return;
+        }
+        ServerData.Instance.GetUserList((exploreList) =>
+        {
+            _challengeListShouldRefresh = false;
+            Utils.RefreshListItems(_scrollRect, _itemPrefab, exploreList.Count,
+                ((i, o) => { o.GetComponent<ChallengeItem>().UpdateData(exploreList[i]); }));
+        }, () =>
+        {
+            CommonTipsView.Open("Net error, please try again!", RefreshChallengePeople);
+        });
     }
 }

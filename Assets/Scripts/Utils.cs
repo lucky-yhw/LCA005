@@ -65,32 +65,32 @@ public static class Utils
         return $"{minutes}m:{seconds}s";
     }
 
-    public static List<PersonConfig> RandomPerson(int count)
-    {
-        var personConfigTable = ConfigLoader.Load<PersonConfigTable>();
-        //随机十个人
-        List<PersonConfig> ranPerson = new List<PersonConfig>();
-        List<PersonConfig> configs = new List<PersonConfig>(personConfigTable.table.Values);
-        for (int i = 0; i < count; i++)
-        {
-            var ran = Random.Range(0, configs.Count);
-            var p = configs[ran];
-            if (!UserData.Instance.BlockList.Contains(p.id) && !UserData.Instance.HasChat(p.id))
-            {
-                ranPerson.Add(configs[ran]);
-                configs.RemoveAt(ran);
-            }
-            else
-            {
-                configs.RemoveAt(ran);
-            }
-            if (configs.Count == 0)
-            {
-                break;
-            }
-        }
-        return ranPerson;
-    }
+    // public static List<PersonConfig> RandomPerson(int count)
+    // {
+    //     var personConfigTable = ConfigLoader.Load<PersonConfigTable>();
+    //     //随机十个人
+    //     List<PersonConfig> ranPerson = new List<PersonConfig>();
+    //     List<PersonConfig> configs = new List<PersonConfig>(personConfigTable.table.Values);
+    //     for (int i = 0; i < count; i++)
+    //     {
+    //         var ran = Random.Range(0, configs.Count);
+    //         var p = configs[ran];
+    //         if (!UserData.Instance.BlockList.Contains(p.id) && !UserData.Instance.HasChat(p.id))
+    //         {
+    //             ranPerson.Add(configs[ran]);
+    //             configs.RemoveAt(ran);
+    //         }
+    //         else
+    //         {
+    //             configs.RemoveAt(ran);
+    //         }
+    //         if (configs.Count == 0)
+    //         {
+    //             break;
+    //         }
+    //     }
+    //     return ranPerson;
+    // }
 
     public static void RefreshListItems(ScrollRect scrollRect, GameObject itemPrefab,int count, Action<int,GameObject> onRefresh)
     {

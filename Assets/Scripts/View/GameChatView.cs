@@ -19,6 +19,8 @@ public class GameChatView : MainViewChild
     [SerializeField] private GameObject _explorePrefab;
     [SerializeField] private GameObject _messagePrefab;
 
+    private bool _exploreListShouldRefresh = true;
+    
     private void Awake()
     {
         _toggleExplore.onValueChanged.AddListener((isOn) =>
@@ -65,29 +67,39 @@ public class GameChatView : MainViewChild
 
     private void ShowExplore()
     {
-        var exploreList = Utils.RandomPerson(10);
-        Utils.RefreshListItems(_scrollRectExplore,_explorePrefab,exploreList.Count,((i, o) =>
+        if (!_exploreListShouldRefresh)
         {
-            var config = exploreList[i];
-            var trans = o.transform;
-            trans.Find("Head").GetComponent<Image>().sprite = Utils.GetUserHead(config.head);
-            trans.Find("TextName").GetComponent<Text>().text = config.name;
-            trans.Find("TextDesc").GetComponent<Text>().text = config.description;
-            trans.Find("Btn_Message").GetComponent<Button>().onClick.AddListener(() =>
+            return;
+        }
+        ServerData.Instance.GetUserList((exploreList) =>
+        {
+            _exploreListShouldRefresh = false;
+            Utils.RefreshListItems(_scrollRectExplore,_explorePrefab,exploreList.Count,((i, o) =>
             {
-                //打开聊天界面
-                OpenChatView(config.id);
-            });
-            trans.Find("Btn_Video").GetComponent<Button>().onClick.AddListener(() =>
-            {
-                //打开通话界面
-                OpenVideoView(config.id);
-            });
-            trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() =>
-            {
-                ReportView.Open(config.id);
-            });
-        }));
+                var config = exploreList[i];
+                var trans = o.transform;
+                trans.Find("Head").GetComponent<Image>().sprite = Utils.GetUserHead(config.head);
+                trans.Find("TextName").GetComponent<Text>().text = config.name;
+                trans.Find("TextDesc").GetComponent<Text>().text = config.description;
+                trans.Find("Btn_Message").GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    //打开聊天界面
+                    OpenChatView(config.id);
+                });
+                trans.Find("Btn_Video").GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    //打开通话界面
+                    OpenVideoView(config.id);
+                });
+                trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    ReportView.Open(config.id);
+                });
+            }));
+        }, () =>
+        {
+            CommonTipsView.Open("Net error, please try again!", ShowExplore);
+        });
     }
 
     private void ShowMessage()

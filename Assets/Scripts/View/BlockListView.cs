@@ -11,6 +11,8 @@ public class BlockListView : MonoBehaviour
     [SerializeField] private GameObject _blockItemPrefab;
     [SerializeField] private GameObject _goEmpty;
 
+    private bool _blockListShouldRefresh = true;
+    
     private void Awake()
     {
         RefreshUI();
@@ -33,18 +35,28 @@ public class BlockListView : MonoBehaviour
 
     private void RefreshUI()
     {
-        Utils.RefreshListItems(_scrollRect,_blockItemPrefab,UserData.Instance.BlockList.Count,((i, o) =>
+        if (_blockListShouldRefresh)
         {
-            var personId = UserData.Instance.BlockList[i];
-            var config = ConfigLoader.Load<PersonConfigTable>().table[personId];
-            o.transform.Find("Head").GetComponent<Image>().sprite = Utils.GetUserHead(config.head);
-            o.transform.Find("TextName").GetComponent<Text>().text = config.name;
-            o.transform.Find("Button_Remove").GetComponent<Button>().onClick.AddListener(() =>
+            return;
+        }
+        ServerData.Instance.GetBlockList((blockList) =>
+        {
+            _blockListShouldRefresh = false;
+            Utils.RefreshListItems(_scrollRect,_blockItemPrefab,blockList.Count,((i, o) =>
             {
-                UserData.Instance.RemoveBlock(config.id);
-            });
-        }));
-        _goEmpty.SetActive(UserData.Instance.BlockList.Count == 0);
+                var person = blockList[i];
+                o.transform.Find("Head").GetComponent<Image>().sprite = Utils.GetUserHead(person.head);
+                o.transform.Find("TextName").GetComponent<Text>().text = person.name;
+                o.transform.Find("Button_Remove").GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    // UserData.Instance.RemoveBlock(person.id);
+                });
+            }));
+            _goEmpty.SetActive(blockList.Count == 0);
+        }, () =>
+        {
+            CommonTipsView.Open("Net error, please try again!", RefreshUI);
+        });
     }
         
     public static void Open()

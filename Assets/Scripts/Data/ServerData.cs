@@ -18,7 +18,7 @@ public class ServerData : MonoBehaviour
         {
             if (_instance == null)
             {
-                var go = new GameObject();
+                var go = new GameObject {name = "ServerData"};
                 go.AddComponent<ServerData>();
             }
 
@@ -33,14 +33,79 @@ public class ServerData : MonoBehaviour
 
     public void Login(Action successCallback = null, Action failCallback = null)
     {
-        LoginToken(successCallback,failCallback);
+        LoginToken(successCallback, failCallback);
     }
 
-    public void ModifyUserData(Dictionary<string,string> param, Action successCallback = null, Action failCallback = null)
+    public void GetBlockList(Action<List<PersonConfig>> successCallback = null, Action failCallback = null)
+    {
+        
+    }
+    
+    public void GetUserList(Action<List<PersonConfig>> successCallback = null, Action failCallback = null)
+    {
+        Dictionary<string, string> param = new Dictionary<string, string>()
+        {
+            {"page", "1"},
+            {"page_size", "99"}
+        };
+
+        Post("https://api.wdtw.site/api/user/list", param, jsonData =>
+        {
+            if ((int) jsonData["code"] == 1)
+            {
+                List<PersonConfig> personList = new List<PersonConfig>();
+                for (int i = 0; i < jsonData["data"]["data"].Count; i++)
+                {
+                    var personData = jsonData["data"]["data"][i];
+                    var person = new PersonConfig();
+                    if (personData.ContainsKey("user_id")&& personData["user_id"] != null)
+                    {
+                        person.id = (int) personData["user_id"];
+                    }
+
+                    if (personData.ContainsKey("nick_name")&& personData["nick_name"] != null)
+                    {
+                        person.name = (string) personData["nick_name"];
+                    }
+
+                    if (personData.ContainsKey("user_header")&& personData["user_header"] != null)
+                    {
+                        int.TryParse((string) personData["user_header"], out person.head);
+                    }
+
+                    if (personData.ContainsKey("user_sign")&& personData["user_sign"] != null)
+                    {
+                        person.description = (string) personData["user_sign"];
+                    }
+
+                    if (personData.ContainsKey("score")&& personData["score"] != null)
+                    {
+                        person.score = (int) personData["score"];
+                    }
+
+                    if (personData.ContainsKey("game_time") && personData["game_time"] != null)
+                    {
+                        person.challengeTime = (int) personData["game_time"];
+                    }
+
+                    personList.Add(person);
+                }
+
+                successCallback?.Invoke(personList);
+            }
+            else
+            {
+                failCallback?.Invoke();
+            }
+        }, failCallback);
+    }
+
+    public void ModifyUserData(Dictionary<string, string> param, Action successCallback = null,
+        Action failCallback = null)
     {
         Post("https://api.wdtw.site/api/user/updateProfile", param, (jsonData) =>
         {
-            if ((int)jsonData["code"] == 1)
+            if ((int) jsonData["code"] == 1)
             {
                 successCallback?.Invoke();
             }
@@ -50,7 +115,7 @@ public class ServerData : MonoBehaviour
             }
         }, failCallback);
     }
-    
+
     private void LoginToken(Action successCallback = null, Action failCallback = null)
     {
         if (string.IsNullOrEmpty(UserData.Instance.Token))
@@ -68,7 +133,7 @@ public class ServerData : MonoBehaviour
                     UserData.Instance.Token = data["data"]["access_token"].ToString();
                     GetUserInfo(successCallback, failCallback);
                 },
-                () => { failCallback?.Invoke(); });   
+                () => { failCallback?.Invoke(); });
         }
         else
         {
@@ -82,8 +147,9 @@ public class ServerData : MonoBehaviour
             new Dictionary<string, string>(),
             (jsonData) =>
             {
-                if ((int)jsonData["code"] == 1)
-                {                var data = jsonData["data"];
+                if ((int) jsonData["code"] == 1)
+                {
+                    var data = jsonData["data"];
                     UserData.Instance.InitByServerData(data);
                     successCallback?.Invoke();
                 }
@@ -107,10 +173,11 @@ public class ServerData : MonoBehaviour
         WWWForm form = new WWWForm();
         foreach (var kv in param)
         {
-            form.AddField(kv.Key,kv.Value);
+            form.AddField(kv.Key, kv.Value);
         }
+
         Debug.Log(url);
-        UnityWebRequest request =  UnityWebRequest.Post(url,form);
+        UnityWebRequest request = UnityWebRequest.Post(url, form);
         // var paramStr = "";
         // foreach (var kv in param)
         // {
@@ -119,9 +186,9 @@ public class ServerData : MonoBehaviour
         // Debug.Log(paramStr);
         if (!string.IsNullOrEmpty(UserData.Instance.Token))
         {
-            request.SetRequestHeader("Authorization","Bearer" + UserData.Instance.Token);
+            request.SetRequestHeader("Authorization", "Bearer" + UserData.Instance.Token);
         }
-        
+
         // byte[] postData = System.Text.Encoding.UTF8.GetBytes(paramStr);
         // request.uploadHandler = new UploadHandlerRaw(postData);
         request.downloadHandler = new DownloadHandlerBuffer();
