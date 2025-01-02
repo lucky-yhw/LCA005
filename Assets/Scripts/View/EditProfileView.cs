@@ -32,15 +32,12 @@ public class EditProfileView : MonoBehaviour
             {
                 if (headId != UserData.Instance.UserHead)
                 {
-                    LoadingView.Open();
                     ServerData.Instance.ModifyUserData(
                         new Dictionary<string, string>() {{"user_header", headId.ToString()}}, () =>
                         {
                             UserData.Instance.UserHead = headId;
-                            LoadingView.Close();
                         }, () =>
                         {
-                            LoadingView.Close();
                             CommonTipsView.Open("Modify Failed!",RefreshUI);
                         });
                 }
@@ -78,17 +75,14 @@ public class EditProfileView : MonoBehaviour
         {
             if (s != UserData.Instance.UserName)
             {
-                LoadingView.Open();
                 ServerData.Instance.ModifyUserData(
                     new Dictionary<string, string>() {{"nick_name", s}}, () =>
                     {
                         UserData.Instance.UserName = s;
-                        LoadingView.Close();
                         CommonTipsView.Open(
                             "Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
                     }, () =>
                     {
-                        LoadingView.Close();
                         CommonTipsView.Open("Modify Failed!",RefreshUI);
                     });
             }
@@ -102,12 +96,10 @@ public class EditProfileView : MonoBehaviour
                     new Dictionary<string, string>() {{"user_sign", s}}, () =>
                     {
                         UserData.Instance.UserDescription = s;
-                        LoadingView.Close();
                         CommonTipsView.Open(
                             "Your Submit Will Be Review In 24 Hours! After that, others can see your new Infomations");
                     }, () =>
                     {
-                        LoadingView.Close();
                         CommonTipsView.Open("Modify Failed!",RefreshUI);
                     });
             }

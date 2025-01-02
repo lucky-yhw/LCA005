@@ -20,22 +20,23 @@ public class BlockListView : MonoBehaviour
         {
             Destroy(gameObject);
         });
-        UserData.Instance.OnBlockChanged += OnBlockChanged;
+        ServerData.Instance.onBlock += OnBlockChanged;
     }
 
     private void OnDestroy()
     {
-        UserData.Instance.OnBlockChanged -= OnBlockChanged;
+        ServerData.Instance.onBlock -= OnBlockChanged;
     }
 
     private void OnBlockChanged()
     {
+        _blockListShouldRefresh = true;
         RefreshUI();
     }
 
     private void RefreshUI()
     {
-        if (_blockListShouldRefresh)
+        if (!_blockListShouldRefresh)
         {
             return;
         }
@@ -49,7 +50,7 @@ public class BlockListView : MonoBehaviour
                 o.transform.Find("TextName").GetComponent<Text>().text = person.name;
                 o.transform.Find("Button_Remove").GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    // UserData.Instance.RemoveBlock(person.id);
+                    ServerData.Instance.Block(person,0);
                 });
             }));
             _goEmpty.SetActive(blockList.Count == 0);

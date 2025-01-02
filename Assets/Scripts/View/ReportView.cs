@@ -9,7 +9,7 @@ public class ReportView : MonoBehaviour
     [SerializeField] private Button _backButton;
     [SerializeField] private Button _submitButton;
 
-    private int _personId;
+    private PersonConfig _person;
 
     private void Awake()
     {
@@ -18,16 +18,7 @@ public class ReportView : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(_inputField.text))
             {
-                UserData.Instance.Block(_personId);
-                LoadingView.OpenAutoClose(() =>
-                {
-                    CommonTipsView.Open(
-                        "We will thoroughly review the information you have reported, and we will address it within 72 hours. Thank you for your feedback and report.",
-                        () =>
-                        {
-                            Destroy(gameObject); 
-                        });
-                });
+                BlockUser();
             }
             else
             {
@@ -36,16 +27,26 @@ public class ReportView : MonoBehaviour
         });
     }
 
-    private void Init(int personId)
+    private void BlockUser()
     {
-        _personId = personId;
+        ServerData.Instance.Block(_person, 1, () =>
+        {
+            CommonTipsView.Open(
+                "We will thoroughly review the information you have reported, and we will address it within 72 hours. Thank you for your feedback and report.",
+                () => { Destroy(gameObject); });
+        }, () => { CommonTipsView.Open("Net error, please try again!", BlockUser); });
     }
 
-    public static void Open(int personId)
+    private void Init(PersonConfig person)
+    {
+        _person = person;
+    }
+
+    public static void Open(PersonConfig person)
     {
         var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/ReportView"),
             Main.Instance.canvas.transform);
         var script = go.GetComponent<ReportView>();
-        script.Init(personId);
+        script.Init(person);
     }
 }

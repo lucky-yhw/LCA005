@@ -33,7 +33,7 @@ public class ChallengeItem : MonoBehaviour
             //     UserData.Instance.Block(config.id);
             // });
             
-            ReportView.Open(config.id);
+            ReportView.Open(config);
         });
     }
 }

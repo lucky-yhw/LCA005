@@ -12,7 +12,6 @@ public class LaunchView : MonoBehaviour
     private void Start()
     {
         _progressBar.fillAmount = 0;
-        MainView.Open();
         _progressBar.DOFillAmount(0.9f, 3f).SetEase(Ease.Linear);
         Sequence seq = DOTween.Sequence();
         seq.InsertCallback(1f, Login);
@@ -23,6 +22,7 @@ public class LaunchView : MonoBehaviour
         ServerData.Instance.Login(() =>
         {
             DOTween.Kill(_progressBar);
+            MainView.Open();
             _progressBar.DOFillAmount(1f, 0.5f).OnComplete(() => { Destroy(gameObject); });
         }, () => { CommonTipsView.Open("Login Failed! Please Try Again!", Login); });
     }

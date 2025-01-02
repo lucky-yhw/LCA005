@@ -26,7 +26,7 @@ public class GameHomeView : MainViewChild
     public override void OnShow()
     {
         UserData.Instance.OnDataChanged += OnDataChanged;
-        UserData.Instance.OnBlockChanged += RefreshChallengePeople;
+        ServerData.Instance.onBlock += OnBlockChange;
         RefreshUserData();
         RefreshChallengePeople();
     }
@@ -34,7 +34,7 @@ public class GameHomeView : MainViewChild
     public override void OnHide()
     {
         UserData.Instance.OnDataChanged -= OnDataChanged;
-        UserData.Instance.OnBlockChanged -= RefreshChallengePeople;
+        ServerData.Instance.onBlock -= OnBlockChange;
     }
 
     private void OnDataChanged()
@@ -49,6 +49,12 @@ public class GameHomeView : MainViewChild
         _goldText.text = Utils.FormatGold(UserData.Instance.Gold);
     }
 
+    private void OnBlockChange()
+    {
+        _challengeListShouldRefresh = true;
+        RefreshChallengePeople();
+    }
+    
     private void RefreshChallengePeople()
     {
         if (!_challengeListShouldRefresh)
