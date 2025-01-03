@@ -79,7 +79,7 @@ public class GameEndView : MonoBehaviour
         }
 
         _textCoins.text = Utils.FormatGold(Const.WinGiftGold);
-        UserData.Instance.Gold += Const.WinGiftGold;
+        ServerData.Instance.GetGold(Const.WinGiftGold);
     }
 
     private void InitFail()

@@ -39,6 +39,32 @@ public class ServerData : MonoBehaviour
         LoginToken(successCallback, failCallback);
     }
 
+    public void CostGold(long gold)
+    {
+        Dictionary<string, string> param = new Dictionary<string, string>()
+        {
+            {"expend_name", "item"},
+            {"diamonds", gold.ToString()},
+        };
+        Post("https://api.wdtw.site/api/expend/do", param, jsonData =>
+        {
+            UserData.Instance.Gold -= gold;
+        });
+    }
+    
+    public void GetGold(long gold)
+    {
+        Dictionary<string, string> param = new Dictionary<string, string>()
+        {
+            {"expend_name", "item"},
+            {"diamonds", gold.ToString()},
+        };
+        Post("https://api.wdtw.site/api/income/do", param, jsonData =>
+        {
+            UserData.Instance.Gold += gold;
+        });
+    }
+    
     public void SendChat(int personId, string msg, int type, Action successCallback = null,
         Action failCallback = null)
     {

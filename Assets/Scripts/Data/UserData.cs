@@ -87,8 +87,6 @@ public class UserData
     [SerializeField] private SerializableTexture _customerHead;
     [SerializeField] private SerializableTexture _background;
     [SerializeField] private long _gold;
-    [SerializeField] private List<ChatData> _chatDataList = new List<ChatData>();
-    [SerializeField] private List<int> _blockList = new List<int>();
     [SerializeField] private bool _inReview = false;
 
     public UserDataChangeDalegate OnDataChanged;
@@ -200,55 +198,10 @@ public class UserData
 
     public bool InReview => _inReview;
 
-    public IReadOnlyList<ChatData> ChatDataList => _chatDataList;
-
-    public IReadOnlyList<int> BlockList => _blockList;
-
     public void Save()
     {
         PlayerPrefs.SetString("UserData", JsonUtility.ToJson(this));
         PlayerPrefs.Save();
-    }
-
-    public ChatData GetChatData(int personId)
-    {
-        foreach (var chatData in _chatDataList)
-        {
-            if (chatData.personId == personId)
-            {
-                return chatData;
-            }
-        }
-
-        var data = new ChatData {personId = personId, chatLines = new List<ChatLine>()};
-        return data;
-    }
-
-    public void SaveChat(int personId, bool isMyChat, string content, SerializableTexture texture)
-    {
-        var chatLine = new ChatLine
-        {
-            timeStamp = Utils.DateTime2Timestamp(DateTime.Now), content = content, isMyContent = isMyChat,
-            texture = texture
-        };
-        ChatData data = null;
-        foreach (var chatData in _chatDataList)
-        {
-            if (chatData.personId == personId)
-            {
-                data = chatData;
-            }
-        }
-
-        if (data == null)
-        {
-            data = new ChatData {personId = personId, chatLines = new List<ChatLine>()};
-            _chatDataList.Add(data);
-        }
-
-        data.chatLines.Add(chatLine);
-        OnDataChanged?.Invoke();
-        Save();
     }
 
     public void Delete()
@@ -256,41 +209,6 @@ public class UserData
         _instance = null;
         PlayerPrefs.SetString("UserData", "");
         PlayerPrefs.Save();
-    }
-
-    public void Block(int personId)
-    {
-        if (!_blockList.Contains(personId))
-        {
-            _blockList.Add(personId);
-            OnDataChanged?.Invoke();
-            OnBlockChanged?.Invoke();
-            Save();
-        }
-    }
-
-    public void RemoveBlock(int personId)
-    {
-        if (_blockList.Contains(personId))
-        {
-            _blockList.Remove(personId);
-            OnDataChanged?.Invoke();
-            OnBlockChanged?.Invoke();
-            Save();
-        }
-    }
-
-    public bool HasChat(int personId)
-    {
-        foreach (var chat in _chatDataList)
-        {
-            if (chat.personId == personId)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public void InitByServerData(JsonData data)

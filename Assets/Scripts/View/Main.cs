@@ -50,7 +50,7 @@ public class Main : MonoBehaviour
         InAppPurchaseManager.Instance.onPurchaseSuccess += (product) =>
         {
             MsgView.Open("Purchase Success!");
-            UserData.Instance.Gold += Const.InAppPurchaseId2Coins[product.definition.id];
+            ServerData.Instance.GetGold(Const.InAppPurchaseId2Coins[product.definition.id]);
         };
     }
 }

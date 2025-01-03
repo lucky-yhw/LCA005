@@ -251,8 +251,8 @@ public class GameView : MonoBehaviour
                 MsgView.Open("Gold Not Enough");
                 return;
             }
-
-            UserData.Instance.Gold -= UNDO_GOLD;
+            
+            ServerData.Instance.CostGold(UNDO_GOLD);
 
             _buttonUndo.interactable = false;
             _collectIcons.Remove(_lastIcon);
@@ -273,8 +273,8 @@ public class GameView : MonoBehaviour
             MsgView.Open("Gold Not Enough");
             return;
         }
-
-        UserData.Instance.Gold -= REFRESH_GOLD;
+        
+        ServerData.Instance.CostGold(REFRESH_GOLD);
         List<Vector2> positions = new List<Vector2>();
         List<int> layers = new List<int>();
         List<GameIcon> icons = new List<GameIcon>(_gameIcons);
@@ -318,9 +318,8 @@ public class GameView : MonoBehaviour
             MsgView.Open("Gold Not Enough");
             return;
         }
-
-        UserData.Instance.Gold -= REMOVE_GOLD;
-
+        
+        ServerData.Instance.CostGold(REMOVE_GOLD);
         _buttonRemove.interactable = false;
         for (int i = 0; i < REMOVE_ITEM_COUNT; i++)
         {
