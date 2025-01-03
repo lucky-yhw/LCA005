@@ -13,7 +13,8 @@ public class ServerData : MonoBehaviour
     private static ServerData _instance;
 
     public Action onBlock;
-    
+    public Action onChat;
+
     public static ServerData Instance
     {
         get
@@ -38,14 +39,135 @@ public class ServerData : MonoBehaviour
         LoginToken(successCallback, failCallback);
     }
 
-    public void Block(PersonConfig person,int status,Action successCallback = null, Action failCallback = null)
+    public void SendChat(int personId, string msg, int type, Action successCallback = null,
+        Action failCallback = null)
+    {
+        Dictionary<string, string> param = new Dictionary<string, string>()
+        {
+            {"type", type.ToString()},
+            {"msg", msg},
+            {"to_user_id", personId.ToString()}
+        };
+        Post("https://api.wdtw.site/api/message/send", param, jsonData =>
+        {
+            if ((int) jsonData["code"] == 1)
+            {
+                successCallback?.Invoke();
+                onChat?.Invoke();
+            }
+            else
+            {
+                failCallback?.Invoke();
+            }
+        }, failCallback);
+    }
+
+    public void GetChatDataHistory(Action<List<ChatData>> successCallback = null, Action failCallback = null)
+    {
+        Post("https://api.wdtw.site/api/message/userList", new Dictionary<string, string>(), jsonData =>
+        {
+            if ((int) jsonData["code"] == 1)
+            {
+                var chatDataList = new List<ChatData>();
+                for (int i = 0; i < jsonData["data"].Count; i++)
+                {
+                    var chatData = new ChatData();
+                    chatData.personId = (int) jsonData["data"][i]["user_info"]["user_id"];
+                    var lineData = jsonData["data"][i]["last_message"];
+                    chatData.person = new PersonConfig();
+                    JsonData userData = null;
+                    if ((int)lineData["from_user_id"] == chatData.personId)
+                    {
+                        userData = lineData["from_user"];
+                    }
+                    else
+                    {
+                        userData = lineData["to_user"];
+                    }
+                    if (userData.ContainsKey("user_id") && userData["user_id"] != null)
+                    {
+                        chatData.person.id = (int) userData["user_id"];
+                    }
+
+                    if (userData.ContainsKey("nick_name") && userData["nick_name"] != null)
+                    {
+                        chatData.person.name = (string) userData["nick_name"];
+                    }
+
+                    if (userData.ContainsKey("user_header") && userData["user_header"] != null)
+                    {
+                        int.TryParse((string) userData["user_header"], out chatData.person.head);
+                    }
+
+                    if (userData.ContainsKey("user_sign") && userData["user_sign"] != null)
+                    {
+                        chatData.person.description = (string) userData["user_sign"];
+                    }
+                    var chatLine = new ChatLine
+                    {
+                        timeStamp = Utils.DateTime2Timestamp(DateTime.Parse((string) lineData["created_at"])),
+                        isMyContent = (int) lineData["from_user"]["user_id"] != chatData.personId
+                    };
+                    chatLine.content = (string) lineData["msg"];
+                    chatData.chatLines.Add(chatLine);
+                    chatDataList.Add(chatData);
+                }
+                successCallback?.Invoke(chatDataList);
+            }
+        }, failCallback);
+    }
+
+    public void GetChatData(int personId, Action<ChatData> successCallback = null, Action failCallback = null)
+    {
+        Dictionary<string, string> param = new Dictionary<string, string>()
+        {
+            {"page", "1"},
+            {"page_size", "99"},
+            {"user_id", personId.ToString()}
+        };
+        Post("https://api.wdtw.site/api/message/list", param, jsonData =>
+        {
+            if ((int) jsonData["code"] == 1)
+            {
+                var chatData = new ChatData {personId = personId};
+                for (int i = 0; i < jsonData["data"]["data"].Count; i++)
+                {
+                    var lineData = jsonData["data"]["data"][i];
+                    var chatLine = new ChatLine
+                    {
+                        timeStamp = (int) lineData["created_at"],
+                        isMyContent = (int) lineData["from_user"]["user_id"] != personId
+                    };
+                    if ((int) lineData["type"] == 0)
+                    {
+                        chatLine.content = (string) lineData["msg"];
+                    }
+                    else
+                    {
+                        chatLine.texture = JsonUtility.FromJson<SerializableTexture>((string) lineData["msg"]);
+                    }
+
+                    chatData.chatLines.Add(chatLine);
+                }
+
+                chatData.chatLines.Sort((a, b) => a.timeStamp - b.timeStamp);
+                successCallback?.Invoke(chatData);
+            }
+            else
+            {
+                failCallback?.Invoke();
+            }
+        }, failCallback);
+    }
+
+    public void Block(PersonConfig person, int status, Action successCallback = null, Action failCallback = null)
     {
         Dictionary<string, string> param = new Dictionary<string, string>()
         {
             {"to_user_id", person.id.ToString()},
             {"status", status.ToString()}
         };
-        Post("https://api.wdtw.site/api/block/commit",param, jsonData =>
+        Post("https://api.wdtw.site/api/block/commit", param, jsonData =>
         {
             if ((int) jsonData["code"] == 1)
             {
@@ -56,9 +178,9 @@ public class ServerData : MonoBehaviour
             {
                 failCallback?.Invoke();
             }
-        },failCallback);
+        }, failCallback);
     }
-    
+
     public void GetBlockList(Action<List<PersonConfig>> successCallback = null, Action failCallback = null)
     {
         Dictionary<string, string> param = new Dictionary<string, string>()
@@ -75,17 +197,17 @@ public class ServerData : MonoBehaviour
                 {
                     var personData = jsonData["data"][i];
                     var person = new PersonConfig();
-                    if (personData.ContainsKey("user_id")&& personData["user_id"] != null)
+                    if (personData.ContainsKey("user_id") && personData["user_id"] != null)
                     {
                         person.id = (int) personData["user_id"];
                     }
 
-                    if (personData.ContainsKey("nick_name")&& personData["nick_name"] != null)
+                    if (personData.ContainsKey("nick_name") && personData["nick_name"] != null)
                     {
                         person.name = (string) personData["nick_name"];
                     }
 
-                    if (personData.ContainsKey("user_header")&& personData["user_header"] != null)
+                    if (personData.ContainsKey("user_header") && personData["user_header"] != null)
                     {
                         int.TryParse((string) personData["user_header"], out person.head);
                     }
@@ -95,7 +217,7 @@ public class ServerData : MonoBehaviour
                         person.description = (string) personData["user_sign"];
                     }
 
-                    if (personData.ContainsKey("score")&& personData["score"] != null)
+                    if (personData.ContainsKey("score") && personData["score"] != null)
                     {
                         person.score = (int) personData["score"];
                     }
@@ -116,7 +238,7 @@ public class ServerData : MonoBehaviour
             }
         }, failCallback);
     }
-    
+
     public void GetUserList(Action<List<PersonConfig>> successCallback = null, Action failCallback = null)
     {
         Dictionary<string, string> param = new Dictionary<string, string>()
@@ -134,12 +256,12 @@ public class ServerData : MonoBehaviour
                 {
                     var personData = jsonData["data"]["data"][i];
                     var person = new PersonConfig();
-                    if (personData.ContainsKey("user_id")&& personData["user_id"] != null)
+                    if (personData.ContainsKey("user_id") && personData["user_id"] != null)
                     {
                         person.id = (int) personData["user_id"];
                     }
 
-                    if (personData.ContainsKey("nick_name")&& personData["nick_name"] != null)
+                    if (personData.ContainsKey("nick_name") && personData["nick_name"] != null)
                     {
                         person.name = (string) personData["nick_name"];
                     }
@@ -152,12 +274,12 @@ public class ServerData : MonoBehaviour
                         }
                     }
 
-                    if (personData.ContainsKey("user_sign")&& personData["user_sign"] != null)
+                    if (personData.ContainsKey("user_sign") && personData["user_sign"] != null)
                     {
                         person.description = (string) personData["user_sign"];
                     }
 
-                    if (personData.ContainsKey("score")&& personData["score"] != null)
+                    if (personData.ContainsKey("score") && personData["score"] != null)
                     {
                         person.score = (int) personData["score"];
                     }
@@ -169,7 +291,7 @@ public class ServerData : MonoBehaviour
 
                     if (person.id != UserData.Instance.UserId)
                     {
-                        personList.Add(person);   
+                        personList.Add(person);
                     }
                 }
 

@@ -19,9 +19,8 @@ public class CallView : MonoBehaviour
         });
     }
 
-    private void InitParams(int personId)
+    private void InitParams(PersonConfig personConfig)
     {
-        var personConfig = ConfigLoader.Load<PersonConfigTable>().table[personId];
         _headImage.sprite = Utils.GetUserHead(personConfig.head);
         _textName.text = personConfig.name;
         StartCoroutine(CancelCall());
@@ -34,11 +33,11 @@ public class CallView : MonoBehaviour
         MsgView.Open("Nobody Answers!");
     }
 
-    public static void Open(int personId)
+    public static void Open(PersonConfig personConfig)
     {
         var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/CallView"),
             Main.Instance.canvas.transform);
         var script = go.GetComponent<CallView>();
-        script.InitParams(personId);
+        script.InitParams(personConfig);
     }
 }

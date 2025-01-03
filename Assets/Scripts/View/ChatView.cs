@@ -15,7 +15,7 @@ public class ChatView : MonoBehaviour
     [SerializeField] private InputField _inputField;
     [SerializeField] private Button _buttonPicture;
 
-    private int _personId = -1;
+    private PersonConfig _person;
 
     private void Awake()
     {
@@ -23,20 +23,20 @@ public class ChatView : MonoBehaviour
         _buttonClose.onClick.AddListener(() => { Destroy(gameObject); });
         _buttonReport.onClick.AddListener(() =>
         {
-            // ReportView.Open(_personId);
+            ReportView.Open(_person);
         });
         _buttonPicture.onClick.AddListener(() =>
         {
             Utils.PickImage((s) =>
             {
-                UserData.Instance.SaveChat(_personId, true, _inputField.text, new SerializableTexture(s));
+                ServerData.Instance.SendChat(_person.id, JsonUtility.ToJson(new SerializableTexture(s)), 1, RefreshUI);
             });
         });
         _buttonSend.onClick.AddListener(() =>
         {
             if (!string.IsNullOrEmpty(_inputField.text))
             {
-                UserData.Instance.SaveChat(_personId, true, _inputField.text, null);
+                ServerData.Instance.SendChat(_person.id, _inputField.text, 0, RefreshUI);
             }
 
             _inputField.text = "";
@@ -53,58 +53,55 @@ public class ChatView : MonoBehaviour
         UserData.Instance.OnDataChanged -= OnUserChanged;
     }
 
-    public void InitParams(int personId)
+    public void InitParams(PersonConfig person)
     {
-        _personId = personId;
-        var personConfigTable = ConfigLoader.Load<PersonConfigTable>();
-        _textName.text = personConfigTable.table[personId].name;
+        _person = person;
+        _textName.text = person.name;
         RefreshUI();
     }
 
     private void RefreshUI()
     {
-        if (_personId == -1)
-        {
-            return;
-        }
 
-        var chatData = UserData.Instance.GetChatData(_personId);
-        Utils.RefreshListItems(_scrollRect, _chatContentItemPrefab, chatData.chatLines.Count, (index, go) =>
+        ServerData.Instance.GetChatData(_person.id, (chatData) =>
         {
-            var tr = go.transform;
-            var line = chatData.chatLines[index];
-            if (!string.IsNullOrEmpty(line.content))
+            Utils.RefreshListItems(_scrollRect, _chatContentItemPrefab, chatData.chatLines.Count, (index, go) =>
             {
-                var str = chatData.chatLines[index].content;
-                var split = 40;
-                if (Utils.ContainsBlockCharacter(str))
+                var tr = go.transform;
+                var line = chatData.chatLines[index];
+                if (!string.IsNullOrEmpty(line.content))
                 {
-                    split = 16;
+                    var str = chatData.chatLines[index].content;
+                    var split = 40;
+                    if (Utils.ContainsBlockCharacter(str))
+                    {
+                        split = 16;
+                    }
+                    string content = Utils.AddNewLineEveryNCharacters(chatData.chatLines[index].content, split);
+                    tr.Find("MyChat/BG/TextContent").GetComponent<Text>().text = content;
+                    tr.Find("MyChat/BG/TextContent").gameObject.SetActive(true);
                 }
-                string content = Utils.AddNewLineEveryNCharacters(chatData.chatLines[index].content, split);
-                tr.Find("MyChat/BG/TextContent").GetComponent<Text>().text = content;
-                tr.Find("MyChat/BG/TextContent").gameObject.SetActive(true);
-            }
 
-            if (line.texture != null && line.texture.textureData.Length > 0)
-            {
-                var sprite = Sprite.Create(line.texture.ToTexture2D(),
-                    new Rect(Vector2.zero,
-                        new Vector2(line.texture.width, line.texture.height)),
-                    new Vector2(0.5f, 0.5f));
-                tr.Find("MyChat/BG/ImageContent").GetComponent<Image>().sprite = sprite;
-                tr.Find("MyChat/BG/ImageContent").GetComponent<Image>().SetNativeSize();
-                tr.Find("MyChat/BG/ImageContent").gameObject.SetActive(true);
-            }
+                if (line.texture != null && line.texture.textureData.Length > 0)
+                {
+                    var sprite = Sprite.Create(line.texture.ToTexture2D(),
+                        new Rect(Vector2.zero,
+                            new Vector2(line.texture.width, line.texture.height)),
+                        new Vector2(0.5f, 0.5f));
+                    tr.Find("MyChat/BG/ImageContent").GetComponent<Image>().sprite = sprite;
+                    tr.Find("MyChat/BG/ImageContent").GetComponent<Image>().SetNativeSize();
+                    tr.Find("MyChat/BG/ImageContent").gameObject.SetActive(true);
+                }
+            });
+            _scrollRect.content.ForceRebuildImmediate(true);
+            _scrollRect.verticalNormalizedPosition = 1;
         });
-        _scrollRect.content.ForceRebuildImmediate(true);
-        _scrollRect.verticalNormalizedPosition = 1;
     }
 
-    public static void Open(int personId)
+    public static void Open(PersonConfig person)
     {
         var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/ChatView"),
             Main.Instance.canvas.transform);
-        go.GetComponent<ChatView>().InitParams(personId);
+        go.GetComponent<ChatView>().InitParams(person);
     }
 }

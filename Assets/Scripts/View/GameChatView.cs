@@ -20,6 +20,7 @@ public class GameChatView : MainViewChild
     [SerializeField] private GameObject _messagePrefab;
 
     private bool _exploreListShouldRefresh = true;
+    private bool _messageListShouldRefresh = true;
     private int _curTab = 0;
 
     private void Awake()
@@ -99,12 +100,12 @@ public class GameChatView : MainViewChild
                 trans.Find("Btn_Message").GetComponent<Button>().onClick.AddListener(() =>
                 {
                     //打开聊天界面
-                    OpenChatView(config.id);
+                    OpenChatView(config);
                 });
                 trans.Find("Btn_Video").GetComponent<Button>().onClick.AddListener(() =>
                 {
                     //打开通话界面
-                    OpenVideoView(config.id);
+                    OpenVideoView(config);
                 });
                 trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() => { ReportView.Open(config); });
             }));
@@ -113,33 +114,40 @@ public class GameChatView : MainViewChild
 
     private void ShowMessage()
     {
-        var chatDataList = new List<ChatData>(UserData.Instance.ChatDataList);
-        chatDataList.Sort(((data, data1) => data.chatLines.Last().timeStamp - data1.chatLines.Last().timeStamp));
-        Utils.RefreshListItems(_scrollRectMessages, _messagePrefab, chatDataList.Count, ((i, o) =>
+        // if (!_messageListShouldRefresh)
+        // {
+        //     return;
+        // }
+        ServerData.Instance.GetChatDataHistory((chatDataList) =>
         {
-            var chatData = chatDataList[i];
-            var config = ConfigLoader.Load<PersonConfigTable>().table[chatData.personId];
-            var trans = o.transform;
-            trans.Find("Head").GetComponent<Image>().sprite = Utils.GetUserHead(config.head);
-            trans.Find("TextName").GetComponent<Text>().text = config.name;
-            trans.Find("TextContent").GetComponent<Text>().text = chatData.chatLines.Last().content;
-            trans.Find("TextTime").GetComponent<Text>().text =
-                Utils.Timestamp2DateTime(chatData.chatLines.Last().timeStamp).ToString("g");
-            trans.Find("Btn_Message").GetComponent<Button>().onClick.AddListener(() => { OpenChatView(config.id); });
-            trans.Find("Btn_Video").GetComponent<Button>().onClick.AddListener(() => { OpenVideoView(config.id); });
-            trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() => { ReportView.Open(config); });
-        }));
+            _messageListShouldRefresh = false;
+            chatDataList.Sort(((data, data1) => data.chatLines.Last().timeStamp - data1.chatLines.Last().timeStamp));
+            Utils.RefreshListItems(_scrollRectMessages, _messagePrefab, chatDataList.Count, ((i, o) =>
+            {
+                var chatData = chatDataList[i];
+                var config = chatData.person;
+                var trans = o.transform;
+                trans.Find("Head").GetComponent<Image>().sprite = Utils.GetUserHead(config.head);
+                trans.Find("TextName").GetComponent<Text>().text = config.name;
+                trans.Find("TextContent").GetComponent<Text>().text = chatData.chatLines.Last().content;
+                trans.Find("TextTime").GetComponent<Text>().text =
+                    Utils.Timestamp2DateTime(chatData.chatLines.Last().timeStamp).ToString("g");
+                trans.Find("Btn_Message").GetComponent<Button>().onClick.AddListener(() => { OpenChatView(config); });
+                trans.Find("Btn_Video").GetComponent<Button>().onClick.AddListener(() => { OpenVideoView(config); });
+                trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() => { ReportView.Open(config); });
+            }));
+        });
     }
 
     //打开聊天界面
-    private void OpenVideoView(int personId)
+    private void OpenVideoView(PersonConfig person)
     {
-        CallView.Open(personId);
+        CallView.Open(person);
     }
 
     //打开通话界面
-    private void OpenChatView(int personId)
+    private void OpenChatView(PersonConfig person)
     {
-        ChatView.Open(personId);
+        ChatView.Open(person);
     }
 }

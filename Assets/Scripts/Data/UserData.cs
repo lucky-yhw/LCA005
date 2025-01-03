@@ -46,6 +46,7 @@ public class ChatLine
 [Serializable]
 public class ChatData
 {
+    public PersonConfig person;
     public int personId = 0;
     public List<ChatLine> chatLines = new List<ChatLine>();
 }
