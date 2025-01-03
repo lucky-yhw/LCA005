@@ -39,6 +39,16 @@ public class ServerData : MonoBehaviour
         LoginToken(successCallback, failCallback);
     }
 
+    public void UploadScore(int score,int timeStamp)
+    {
+        Dictionary<string, string> param = new Dictionary<string, string>()
+        {
+            {"score", score.ToString()},
+            {"game_time", timeStamp.ToString()},
+        };
+        Post("https://api.wdtw.site/api/user/updateGameProfile", param);
+    }
+    
     public void CostGold(long gold)
     {
         Dictionary<string, string> param = new Dictionary<string, string>()
@@ -250,7 +260,7 @@ public class ServerData : MonoBehaviour
 
                     if (personData.ContainsKey("game_time") && personData["game_time"] != null)
                     {
-                        person.challengeTime = (int) personData["game_time"];
+                        int.TryParse((string) personData["game_time"], out person.challengeTime);
                     }
 
                     personList.Add(person);
@@ -312,7 +322,7 @@ public class ServerData : MonoBehaviour
 
                     if (personData.ContainsKey("game_time") && personData["game_time"] != null)
                     {
-                        person.challengeTime = (int) personData["game_time"];
+                        int.TryParse((string) personData["game_time"], out person.challengeTime);
                     }
 
                     if (person.id != UserData.Instance.UserId)

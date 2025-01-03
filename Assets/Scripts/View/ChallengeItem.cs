@@ -23,16 +23,10 @@ public class ChallengeItem : MonoBehaviour
         _challengeButton.onClick.AddListener(() =>
         {
             //挑战
-            GameView.Open(config.id);
+            GameView.Open(config);
         });
         _reportButton.onClick.AddListener(() =>
         {
-            //举报
-            // CommonTipsView.Open("Are You Sure To Report This User?", () =>
-            // {
-            //     UserData.Instance.Block(config.id);
-            // });
-            
             ReportView.Open(config);
         });
     }

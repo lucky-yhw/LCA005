@@ -44,7 +44,7 @@ public class GameView : MonoBehaviour
 
     private int _currentScore = 0;
     private float _currentSeconds = 0;
-    private int _oppId;
+    private PersonConfig _oppPerson;
 
     private List<GameIcon> _gameIcons = new List<GameIcon>();
     private List<GameIcon> _collectIcons = new List<GameIcon>();
@@ -69,16 +69,15 @@ public class GameView : MonoBehaviour
         _textRefreshGold.text = "X" + Utils.FormatGold(REFRESH_GOLD);
     }
 
-    private void Init(int personId)
+    private void Init(PersonConfig person)
     {
-        _oppId = personId;
+        _oppPerson = person;
         _textMyName.text = UserData.Instance.UserName;
         _textMyScore.text = _currentScore.ToString();
         _imgMyHead.sprite = Utils.GetMyHead(); //Utils.GetUserHead(UserData.Instance.UserHead);
-        var config = ConfigLoader.Load<PersonConfigTable>().table[personId];
-        _imgOppHead.sprite = Utils.GetUserHead(config.head);
-        _textOppScore.text = config.score.ToString();
-        _textOppName.text = config.name;
+        _imgOppHead.sprite = Utils.GetUserHead(_oppPerson.head);
+        _textOppScore.text = _oppPerson.score.ToString();
+        _textOppName.text = _oppPerson.name;
         StartGame();
     }
 
@@ -89,12 +88,12 @@ public class GameView : MonoBehaviour
     }
 
 
-    public static void Open(int personId)
+    public static void Open(PersonConfig person)
     {
         var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/GameView"),
             Main.Instance.canvas.transform);
         var script = go.GetComponent<GameView>();
-        script.Init(personId);
+        script.Init(person);
     }
 
 
@@ -194,7 +193,7 @@ public class GameView : MonoBehaviour
         if (_gameIcons.Count == 0)
         {
             Destroy(gameObject);
-            GameEndView.OpenWin(new GameResult(){score = _currentScore,totalSeconds = _currentSeconds}, _oppId);
+            GameEndView.OpenWin(new GameResult(){score = _currentScore,totalSeconds = _currentSeconds}, _oppPerson);
             yield break;
         }
 

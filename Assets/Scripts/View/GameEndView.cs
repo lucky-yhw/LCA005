@@ -48,11 +48,11 @@ public class GameEndView : MonoBehaviour
         });
     }
 
-    private void InitWin(GameResult result, int personId)
+    private void InitWin(GameResult result, PersonConfig person)
     {
         _goFail.SetActive(false);
         _goWin.SetActive(true);
-        var personConfig = ConfigLoader.Load<PersonConfigTable>().table[personId];
+        var personConfig = person;
         var isWin = result.score > personConfig.score ||
                     (result.score == personConfig.score && result.totalSeconds < personConfig.challengeTime);
         if (isWin)
@@ -80,6 +80,7 @@ public class GameEndView : MonoBehaviour
 
         _textCoins.text = Utils.FormatGold(Const.WinGiftGold);
         ServerData.Instance.GetGold(Const.WinGiftGold);
+        ServerData.Instance.UploadScore(result.score,(int)result.totalSeconds);
     }
 
     private void InitFail()
@@ -88,12 +89,12 @@ public class GameEndView : MonoBehaviour
         _goWin.SetActive(false);
     }
     
-    public static void OpenWin(GameResult result, int personId)
+    public static void OpenWin(GameResult result, PersonConfig person)
     {
         var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/GameEndView"),
             Main.Instance.canvas.transform);
         var script = go.GetComponent<GameEndView>();
-        script.InitWin(result,personId);
+        script.InitWin(result,person);
     }
     
     public static void OpenFail()
