@@ -39,12 +39,12 @@ public class ServerData : MonoBehaviour
         LoginToken(successCallback, failCallback);
     }
 
-    public void UploadScore(int score,int timeStamp)
+    public void UploadScore(int score,int totalSeconds)
     {
         Dictionary<string, string> param = new Dictionary<string, string>()
         {
             {"score", score.ToString()},
-            {"game_time", timeStamp.ToString()},
+            {"game_time", totalSeconds.ToString()},
         };
         Post("https://api.wdtw.site/api/user/updateGameProfile", param);
     }
