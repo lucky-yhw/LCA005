@@ -322,7 +322,7 @@ public class ServerData : MonoBehaviour
 
                     if (personData.ContainsKey("game_time") && personData["game_time"] != null)
                     {
-                        int.TryParse((string) personData["game_time"], out person.challengeTime);
+                        person.challengeTime = (int) personData["game_time"];
                     }
 
                     if (person.id != UserData.Instance.UserId)
