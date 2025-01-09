@@ -360,7 +360,7 @@ public class ServerData : MonoBehaviour
     {
         if (string.IsNullOrEmpty(UserData.Instance.Token))
         {
-            var uuid = Application.identifier;
+            var uuid = SystemInfo.deviceUniqueIdentifier;
             Post("https://api.wdtw.site/api/quickLogin",
                 new Dictionary<string, string>()
                 {
