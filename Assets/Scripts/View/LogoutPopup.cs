@@ -17,8 +17,10 @@ public class LogoutPopup : MonoBehaviour
         }));
         _deleteAccountButton.onClick.AddListener((() =>
         {
-            UserData.Instance.Delete();
-            Application.Quit();
+            ServerData.Instance.Logoff(() =>
+            {
+                Application.Quit();
+            });
         }));
     }
 

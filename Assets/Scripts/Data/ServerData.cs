@@ -39,6 +39,15 @@ public class ServerData : MonoBehaviour
         LoginToken(successCallback, failCallback);
     }
 
+    public void Logoff(Action successCallback = null, Action failCallback = null)
+    {
+        Dictionary<string, string> param = new Dictionary<string, string>();
+        Post("https://api.wdtw.site/api/logoff", param, jsonData =>
+        {
+            successCallback?.Invoke();
+        });
+    }
+    
     public void UploadScore(int score,int totalSeconds)
     {
         Dictionary<string, string> param = new Dictionary<string, string>()
@@ -132,7 +141,10 @@ public class ServerData : MonoBehaviour
 
                     if (userData.ContainsKey("user_header") && userData["user_header"] != null)
                     {
-                        int.TryParse((string) userData["user_header"], out chatData.person.head);
+                        if (!int.TryParse((string) userData["user_header"], out chatData.person.head))
+                        {
+                            chatData.person.head = 1;
+                        }
                     }
 
                     if (userData.ContainsKey("user_sign") && userData["user_sign"] != null)
@@ -245,7 +257,10 @@ public class ServerData : MonoBehaviour
 
                     if (personData.ContainsKey("user_header") && personData["user_header"] != null)
                     {
-                        int.TryParse((string) personData["user_header"], out person.head);
+                        if (!int.TryParse((string) personData["user_header"], out person.head))
+                        {
+                            person.head = 1;
+                        }
                     }
 
                     if (personData.ContainsKey("user_sign") && personData["user_sign"] != null)

@@ -62,15 +62,16 @@ public class UserData
         {
             if (_instance == null)
             {
-                var save = PlayerPrefs.GetString("UserData", "");
-                if (!string.IsNullOrEmpty(save))
-                {
-                    _instance = JsonUtility.FromJson<UserData>(save);
-                }
-                else
-                {
-                    _instance = new UserData {_userName = "Guest_" + Random.Range(100000, 999999)};
-                }
+                // var save = PlayerPrefs.GetString("UserData", "");
+                // if (!string.IsNullOrEmpty(save))
+                // {
+                //     _instance = JsonUtility.FromJson<UserData>(save);
+                // }
+                // else
+                // {
+                //     _instance = new UserData {_userName = "Guest_" + Random.Range(100000, 999999)};
+                // }
+                _instance = new UserData();
             }
 
             return _instance;
@@ -157,7 +158,6 @@ public class UserData
         set
         {
             _token = value;
-            Save();
         }
     }
 
@@ -200,15 +200,15 @@ public class UserData
 
     public void Save()
     {
-        PlayerPrefs.SetString("UserData", JsonUtility.ToJson(this));
-        PlayerPrefs.Save();
+        // PlayerPrefs.SetString("UserData", JsonUtility.ToJson(this));
+        // PlayerPrefs.Save();
     }
 
     public void Delete()
     {
         _instance = null;
-        PlayerPrefs.SetString("UserData", "");
-        PlayerPrefs.Save();
+        // PlayerPrefs.SetString("UserData", "");
+        // PlayerPrefs.Save();
     }
 
     public void InitByServerData(JsonData data)
