@@ -23,7 +23,7 @@ public class ChatView : MonoBehaviour
         _buttonClose.onClick.AddListener(() => { Destroy(gameObject); });
         _buttonReport.onClick.AddListener(() =>
         {
-            ReportView.Open(_person);
+            OptionsView.Open(_person);
         });
         _buttonPicture.onClick.AddListener(() =>
         {

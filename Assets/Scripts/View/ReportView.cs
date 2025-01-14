@@ -29,7 +29,7 @@ public class ReportView : MonoBehaviour
 
     private void BlockUser()
     {
-        ServerData.Instance.Block(_person, 1, () =>
+        ServerData.Instance.Report(_person, () =>
         {
             CommonTipsView.Open(
                 "We will thoroughly review the information you have reported, and we will address it within 72 hours. Thank you for your feedback and report.",

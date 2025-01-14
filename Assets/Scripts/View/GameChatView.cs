@@ -39,12 +39,14 @@ public class GameChatView : MainViewChild
                 ChangeTab(1);
             }
         });
-        ServerData.Instance.onBlock += OnBlockChange;
+        ServerData.Instance.onBlock += OnUserListChange;
+        ServerData.Instance.onReport += OnUserListChange;
     }
 
     private void OnDestroy()
     {
-        ServerData.Instance.onBlock -= OnBlockChange;
+        ServerData.Instance.onBlock -= OnUserListChange;
+        ServerData.Instance.onReport -= OnUserListChange;
     }
 
     public override void OnShow()
@@ -56,7 +58,7 @@ public class GameChatView : MainViewChild
     {
     }
 
-    private void OnBlockChange()
+    private void OnUserListChange()
     {
         _exploreListShouldRefresh = true;
         ChangeTab(_curTab);
@@ -107,7 +109,7 @@ public class GameChatView : MainViewChild
                     //打开通话界面
                     OpenVideoView(config);
                 });
-                trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() => { ReportView.Open(config); });
+                trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() => { OptionsView.Open(config); });
             }));
         }, () => { CommonTipsView.Open("Net error, please try again!", ShowExplore); });
     }
@@ -134,7 +136,7 @@ public class GameChatView : MainViewChild
                     Utils.Timestamp2DateTime(chatData.chatLines.Last().timeStamp).ToString("g");
                 trans.Find("Btn_Message").GetComponent<Button>().onClick.AddListener(() => { OpenChatView(config); });
                 trans.Find("Btn_Video").GetComponent<Button>().onClick.AddListener(() => { OpenVideoView(config); });
-                trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() => { ReportView.Open(config); });
+                trans.Find("Btn_Report").GetComponent<Button>().onClick.AddListener(() => { OptionsView.Open(config); });
             }));
         });
     }

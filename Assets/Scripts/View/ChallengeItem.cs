@@ -27,7 +27,7 @@ public class ChallengeItem : MonoBehaviour
         });
         _reportButton.onClick.AddListener(() =>
         {
-            ReportView.Open(config);
+            OptionsView.Open(config);
         });
     }
 }

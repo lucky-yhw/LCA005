@@ -13,6 +13,7 @@ public class ServerData : MonoBehaviour
     private static ServerData _instance;
 
     public Action onBlock;
+    public Action onReport;
     public Action onChat;
 
     public static ServerData Instance
@@ -208,6 +209,29 @@ public class ServerData : MonoBehaviour
         }, failCallback);
     }
 
+    public void Report(PersonConfig person, Action successCallback = null, Action failCallback = null)
+    {
+        Dictionary<string, string> param = new Dictionary<string, string>()
+        {
+            {"des", ""},
+            {"img", ""},
+            {"type", "99"},
+            {"other_id", person.id.ToString()},
+        };
+        Post("https://api.wdtw.site/api/report/commit", param, jsonData =>
+        {
+            if ((int) jsonData["code"] == 1)
+            {
+                successCallback?.Invoke();
+                onReport?.Invoke();
+            }
+            else
+            {
+                failCallback?.Invoke();
+            }
+        }, failCallback);
+    }
+    
     public void Block(PersonConfig person, int status, Action successCallback = null, Action failCallback = null)
     {
         Dictionary<string, string> param = new Dictionary<string, string>()
