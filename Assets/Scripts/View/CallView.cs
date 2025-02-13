@@ -9,6 +9,8 @@ public class CallView : MonoBehaviour
     [SerializeField] private Image _headImage;
     [SerializeField] private Button _closeButton;
     [SerializeField] private Text _textName;
+    [SerializeField] private GameObject _calling;
+    [SerializeField] private GameObject _talking;
 
     private void Awake()
     {
@@ -28,9 +30,11 @@ public class CallView : MonoBehaviour
 
     IEnumerator CancelCall()
     {
-        yield return new WaitForSeconds(20);
-        Destroy(gameObject);
-        MsgView.Open("Nobody Answers!");
+        yield return new WaitForSeconds(5);
+        _calling.SetActive(false);
+        _talking.SetActive(true);
+        // Destroy(gameObject);
+        // MsgView.Open("Nobody Answers!");
     }
 
     public static void Open(PersonConfig personConfig)
