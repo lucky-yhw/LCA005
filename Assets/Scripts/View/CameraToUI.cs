@@ -69,9 +69,8 @@ public class CameraToUI : MonoBehaviour
             1,
             1
         );
-
-        // 处理旋转
-        // display.rectTransform.localEulerAngles = new Vector3(0, 0, -webcamTexture.videoRotationAngle);
+        
+        display.rectTransform.localEulerAngles = new Vector3(0, 0, -webcamTexture.videoRotationAngle);
 
         // 调整宽高比
         if (aspectFitter)
