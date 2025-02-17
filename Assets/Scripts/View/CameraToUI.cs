@@ -66,7 +66,7 @@ public class CameraToUI : MonoBehaviour
         // 处理镜像（前置摄像头需要镜像）
         display.rectTransform.localScale = new Vector3(
             useFrontCamera ? -1 : 1,
-            1,
+            -1,
             1
         );
 
