@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.unity.2d.sprite": "1.0.0",
-    "com.unity.ide.rider": "3.0.28",
+    "com.unity.ide.rider": "3.0.34",
     "com.unity.purchasing": "4.11.0",
     "com.unity.services.analytics": "5.0.2",
     "com.unity.ugui": "1.0.0",
