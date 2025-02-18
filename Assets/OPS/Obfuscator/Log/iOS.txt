@@ -150,7 +150,7 @@
   - Main
 
 [Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found 27 Prefabs.
-[Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found 1309 Components in the prefabs.
+[Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found 1318 Components in the prefabs.
 [Info][OPS.OBF][OnAnalyse_Component_Prefabs] Process component Analyse Unity Gui Component
 [Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 0 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
   at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
@@ -2770,6 +2770,24 @@
   at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
 [Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1308 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
   at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1309 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1310 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1311 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1312 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1313 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1314 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1315 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1316 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
+[Warning][OPS.OBF][OnAnalyse_Component_Prefabs] Failed to process current iterated Component at index 1317 with Exception: System.MissingMethodException: Method not found: UnityEngine.UI.InputField/SubmitEvent UnityEngine.UI.InputField.get_onEndEdit()
+  at OPS.Obfuscator.Editor.Project.PreBuild.Pipeline.PreBuildPipeline.Process_Component_Analyse_And_Manipulate (System.Collections.Generic.List`1[T] _ComponentList) [0x0006e] in <e6e6e27fbb4c4c3f86a179e64f62f143>:0 
 [Info][OPS.OBF][OnAnalyse_Component_Prefabs] Process component Analyse MonoScript
 [Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference UnityEngine.UI.Image for BlockItem
 [Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference in serialized properties for BlockItem (1):
@@ -4282,6 +4300,14 @@
 [Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference CameraToUI for Talking
 [Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference in serialized properties for Talking (1):
   - CameraToUI
+
+[Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference UnityEngine.UI.RawImage for Video
+[Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference in serialized properties for Video (1):
+  - UnityEngine.UI.RawImage
+
+[Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference UnityEngine.UI.RawImage for RawImage
+[Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference in serialized properties for RawImage (1):
+  - UnityEngine.UI.RawImage
 
 [Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference UnityEngine.UI.RawImage for RawImage
 [Debug][OPS.OBF][OnAnalyse_Component_Prefabs] Found mono script reference in serialized properties for RawImage (1):

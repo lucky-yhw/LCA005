@@ -30,11 +30,11 @@ public class CallView : MonoBehaviour
 
     IEnumerator CancelCall()
     {
-        yield return new WaitForSeconds(5);
-        _calling.SetActive(false);
-        _talking.SetActive(true);
-        // Destroy(gameObject);
-        // MsgView.Open("Nobody Answers!");
+        yield return new WaitForSeconds(20);
+        // _calling.SetActive(false);
+        // _talking.SetActive(true);
+        Destroy(gameObject);
+        MsgView.Open("Nobody Answers!");
     }
 
     public static void Open(PersonConfig personConfig)
