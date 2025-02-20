@@ -794,10 +794,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameHomeView
       objectReference: {fileID: 0}
-    - target: {fileID: 3754617114110594345, guid: 4fc89077ac1ef154195eeef33310a092, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6004889819105507352, guid: 4fc89077ac1ef154195eeef33310a092, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -880,7 +876,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7522073609960657511, guid: 4fc89077ac1ef154195eeef33310a092, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 55
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -993,55 +989,59 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3512894731654039366, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3512894731654039366, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3512894731654039366, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 562.5
       objectReference: {fileID: 0}
     - target: {fileID: 3512894731654039366, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -465.01
       objectReference: {fileID: 0}
     - target: {fileID: 4317439807630759708, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4317439807630759708, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4317439807630759708, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 562.5
       objectReference: {fileID: 0}
     - target: {fileID: 4317439807630759708, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -804.02
       objectReference: {fileID: 0}
     - target: {fileID: 8229775996140503133, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8229775996140503133, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8229775996140503133, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 562.5
       objectReference: {fileID: 0}
     - target: {fileID: 8229775996140503133, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -191
       objectReference: {fileID: 0}
     - target: {fileID: 8718481822984442774, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
       propertyPath: m_Name
       value: PersonView
+      objectReference: {fileID: 0}
+    - target: {fileID: 8718481822984442774, guid: 4ba105aa6c7391947960dc0d4a2307cc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1170,7 +1170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4960620765585016707, guid: 51fbe3e3216895d4680c67d67c42cd26, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5094159624026276403, guid: 51fbe3e3216895d4680c67d67c42cd26, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1190,11 +1190,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7955056370370745210, guid: 51fbe3e3216895d4680c67d67c42cd26, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8953437485248646757, guid: 51fbe3e3216895d4680c67d67c42cd26, type: 3}
       propertyPath: m_Name
       value: GameChatView
+      objectReference: {fileID: 0}
+    - target: {fileID: 8953437485248646757, guid: 51fbe3e3216895d4680c67d67c42cd26, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

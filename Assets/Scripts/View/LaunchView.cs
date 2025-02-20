@@ -23,7 +23,20 @@ public class LaunchView : MonoBehaviour
         {
             DOTween.Kill(_progressBar);
             MainView.Open();
-            _progressBar.DOFillAmount(1f, 0.5f).OnComplete(() => { Destroy(gameObject); });
+            _progressBar.DOFillAmount(1f, 0.5f).OnComplete(() =>
+            {
+                if (PlayerPrefs.GetInt("EULA",0) == 0)
+                {
+                    EULAView.Open(() =>
+                    {
+                        Destroy(gameObject);
+                    });
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
+            });
         }, () => { CommonTipsView.Open("Login Failed! Please Try Again!", Login); });
     }
 }

@@ -13,13 +13,16 @@ public class GameHomeView : MainViewChild
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private GameObject _itemPrefab;
     [SerializeField] private Button _buttonPurchase;
+    [SerializeField] private Button _buttonStart;
 
     private bool _challengeListShouldRefresh = true;
-    
+
     private void Awake()
-    {_buttonPurchase.onClick.AddListener(() =>
+    {
+        _buttonPurchase.onClick.AddListener(() => { PurchaseView.Open(); });
+        _buttonStart.onClick.AddListener(() =>
         {
-            PurchaseView.Open();
+            GameView.Open();
         });
     }
 
@@ -47,7 +50,7 @@ public class GameHomeView : MainViewChild
     private void RefreshUserData()
     {
         _nameText.text = UserData.Instance.UserName;
-        _headImg.sprite = Utils.GetMyHead();//Utils.GetUserHead(UserData.Instance.UserHead);
+        _headImg.sprite = Utils.GetMyHead(); //Utils.GetUserHead(UserData.Instance.UserHead);
         _goldText.text = Utils.FormatGold(UserData.Instance.Gold);
     }
 
@@ -56,21 +59,19 @@ public class GameHomeView : MainViewChild
         _challengeListShouldRefresh = true;
         RefreshChallengePeople();
     }
-    
+
     private void RefreshChallengePeople()
     {
         if (!_challengeListShouldRefresh)
         {
             return;
         }
+
         ServerData.Instance.GetUserList((exploreList) =>
         {
             _challengeListShouldRefresh = false;
             Utils.RefreshListItems(_scrollRect, _itemPrefab, exploreList.Count,
                 ((i, o) => { o.GetComponent<ChallengeItem>().UpdateData(exploreList[i]); }));
-        }, () =>
-        {
-            CommonTipsView.Open("Net error, please try again!", RefreshChallengePeople);
-        });
+        }, () => { CommonTipsView.Open("Net error, please try again!", RefreshChallengePeople); });
     }
 }

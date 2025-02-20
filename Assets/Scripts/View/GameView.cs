@@ -72,12 +72,23 @@ public class GameView : MonoBehaviour
     private void Init(PersonConfig person)
     {
         _oppPerson = person;
-        _textMyName.text = UserData.Instance.UserName;
-        _textMyScore.text = _currentScore.ToString();
-        _imgMyHead.sprite = Utils.GetMyHead(); //Utils.GetUserHead(UserData.Instance.UserHead);
-        _imgOppHead.sprite = Utils.GetUserHead(_oppPerson.head);
-        _textOppScore.text = _oppPerson.score.ToString();
-        _textOppName.text = _oppPerson.name;
+        if (_oppPerson != null)
+        {
+            _textMyName.text = UserData.Instance.UserName;
+            _textMyScore.text = _currentScore.ToString();
+            _imgMyHead.sprite = Utils.GetMyHead(); //Utils.GetUserHead(UserData.Instance.UserHead);
+            _imgOppHead.sprite = Utils.GetUserHead(_oppPerson.head);
+            _textOppScore.text = _oppPerson.score.ToString();
+            _textOppName.text = _oppPerson.name;  
+            _imgOppHead.transform.parent.gameObject.SetActive(true);
+        }
+        else
+        {
+            _textMyName.text = UserData.Instance.UserName;
+            _textMyScore.text = _currentScore.ToString();
+            _imgMyHead.sprite = Utils.GetMyHead(); //Utils.GetUserHead(UserData.Instance.UserHead);
+            _imgOppHead.transform.parent.gameObject.SetActive(false);
+        }
         StartGame();
     }
 
@@ -88,7 +99,7 @@ public class GameView : MonoBehaviour
     }
 
 
-    public static void Open(PersonConfig person)
+    public static void Open(PersonConfig person = null)
     {
         var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/GameView"),
             Main.Instance.canvas.transform);

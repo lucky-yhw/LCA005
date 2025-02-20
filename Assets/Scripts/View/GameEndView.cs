@@ -32,6 +32,9 @@ public class GameEndView : MonoBehaviour
     
     [SerializeField] private GameObject _goFail;
     [SerializeField] private GameObject _goWin;
+    
+    [SerializeField] private GameObject _goWinner;
+    [SerializeField] private GameObject _goFailer;
     private void Awake()
     {
         _buttonSend.onClick.AddListener(() =>
@@ -52,30 +55,44 @@ public class GameEndView : MonoBehaviour
     {
         _goFail.SetActive(false);
         _goWin.SetActive(true);
-        var personConfig = person;
-        var isWin = result.score > personConfig.score ||
-                    (result.score == personConfig.score && result.totalSeconds < personConfig.challengeTime);
-        if (isWin)
+        if (person != null)
+        {
+            _goFailer.SetActive(true);
+            _buttonSend.gameObject.SetActive(true);
+            var personConfig = person;
+            var isWin = result.score > personConfig.score ||
+                        (result.score == personConfig.score && result.totalSeconds < personConfig.challengeTime);
+            if (isWin)
+            {
+                _winnerHeadImg.sprite = Utils.GetMyHead();
+                _textWinnerName.text = UserData.Instance.UserName;
+                _textWinnerScore.text = result.score.ToString();
+                _textWinTime.text = Utils.FormatSecondsStr(result.totalSeconds);
+                _failerHeadImg.sprite = Utils.GetUserHead(personConfig.head);
+                _textFailerName.text = personConfig.name;
+                _textFailerScore.text = personConfig.score.ToString();
+                _textFailTime.text = Utils.FormatSecondsStr(result.totalSeconds);
+            }
+            else
+            {
+                _failerHeadImg.sprite = Utils.GetMyHead();
+                _textFailerName.text = UserData.Instance.UserName;
+                _textFailerScore.text = result.score.ToString();
+                _textFailTime.text = Utils.FormatSecondsStr(result.totalSeconds);
+                _winnerHeadImg.sprite = Utils.GetUserHead(personConfig.head);
+                _textWinnerName.text = personConfig.name;
+                _textWinnerScore.text = personConfig.score.ToString();
+                _textWinTime.text = Utils.FormatSecondsStr(personConfig.challengeTime);
+            }   
+        }
+        else
         {
             _winnerHeadImg.sprite = Utils.GetMyHead();
             _textWinnerName.text = UserData.Instance.UserName;
             _textWinnerScore.text = result.score.ToString();
             _textWinTime.text = Utils.FormatSecondsStr(result.totalSeconds);
-            _failerHeadImg.sprite = Utils.GetUserHead(personConfig.head);
-            _textFailerName.text = personConfig.name;
-            _textFailerScore.text = personConfig.score.ToString();
-            _textFailTime.text = Utils.FormatSecondsStr(result.totalSeconds);
-        }
-        else
-        {
-            _failerHeadImg.sprite = Utils.GetMyHead();
-            _textFailerName.text = UserData.Instance.UserName;
-            _textFailerScore.text = result.score.ToString();
-            _textFailTime.text = Utils.FormatSecondsStr(result.totalSeconds);
-            _winnerHeadImg.sprite = Utils.GetUserHead(personConfig.head);
-            _textWinnerName.text = personConfig.name;
-            _textWinnerScore.text = personConfig.score.ToString();
-            _textWinTime.text = Utils.FormatSecondsStr(personConfig.challengeTime);
+            _goFailer.SetActive(false);
+            _buttonSend.gameObject.SetActive(false);
         }
 
         _textCoins.text = Utils.FormatGold(Const.WinGiftGold);
@@ -89,7 +106,7 @@ public class GameEndView : MonoBehaviour
         _goWin.SetActive(false);
     }
     
-    public static void OpenWin(GameResult result, PersonConfig person)
+    public static void OpenWin(GameResult result, PersonConfig person = null)
     {
         var go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/View/GameEndView"),
             Main.Instance.canvas.transform);

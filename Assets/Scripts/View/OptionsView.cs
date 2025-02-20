@@ -8,6 +8,7 @@ public class OptionsView : MonoBehaviour
     
     [SerializeField] private Button _buttonBlock;
     [SerializeField] private Button _buttonReport;
+    [SerializeField] private Button _buttonClose;
 
 
     private PersonConfig _person;
@@ -21,6 +22,10 @@ public class OptionsView : MonoBehaviour
         _buttonReport.onClick.AddListener(() =>
         {
             ReportView.Open(_person);
+            Destroy(gameObject);
+        });
+        _buttonClose.onClick.AddListener(() =>
+        {
             Destroy(gameObject);
         });
     }

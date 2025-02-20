@@ -382,6 +382,8 @@ MonoBehaviour:
   _buttonBack: {fileID: 4446150485610697263}
   _goFail: {fileID: 8628284411434744886}
   _goWin: {fileID: 5456741223895180361}
+  _goWinner: {fileID: 8012868027965833308}
+  _goFailer: {fileID: 1811894434800050001}
 --- !u!1 &3709854608120030824
 GameObject:
   m_ObjectHideFlags: 0
@@ -2262,7 +2264,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3260468365285018159
 RectTransform:
   m_ObjectHideFlags: 0
